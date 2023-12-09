@@ -1,32 +1,41 @@
-import { useState } from 'react'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { useState, useEffect } from "react";
 function App() {
-  const [count, setCount] = useState(0)
+  const [username, setUsername] = useState('dsfsf');
+  const [password, setPassword] = useState('asdasd');
 
+  useEffect(() => {
+    const fetchBaseURL = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password,
+          }),
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          // Handle successful login, e.g., store the access token in state or local storage
+          console.log('Login successful');
+          console.log(data.access_token);
+        } else {
+          // Handle login error
+          console.error(data.message);
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+      }
+    };
+
+    fetchBaseURL();
+  }, []);
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>{username}</div>
   )
 }
 
