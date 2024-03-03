@@ -1,7 +1,7 @@
 const Bottombar = () => {
   return (
     <div>
-      
+      Bottim
     </div>
   )
 }
