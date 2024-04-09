@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root{
+    background: rgb(23, 27, 31);
+    height: 100%;
+}
+.home-height{
+    height: calc(100vh - 8vh);
+}
+.hovering-element:hover{
+    background: rgb(98, 43, 169);
+    color: antiquewhite;
+    transition: all 0.2s linear;
+}
