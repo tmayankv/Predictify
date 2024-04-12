@@ -92,11 +92,11 @@ import { ChartComponent, SeriesCollectionDirective, SeriesDirective,
   };
   function Area() {
     return (
-      <div className="w-full p-6 flex justify-center bg-white rounded-3xl">
+      <div className="scale-50 small-scale lg:scale-75 flex justify-center bg-white rounded-3xl">
       <ChartComponent
         id="line-chart"
         height="100%"  // Set height using vh (viewport height)
-        width="80%"   // Set width using percentage
+        width="50%"   // Set width using percentage
         primaryXAxis={areaPrimaryXAxis}
         primaryYAxis={areaPrimaryYAxis}
         chartArea={{ border: { width: 0 } }}

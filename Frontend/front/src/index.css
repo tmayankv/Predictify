@@ -8,3 +8,9 @@
     color: antiquewhite;
     transition: all 0.2s linear;
 }
+
+@media (max-width: 368px){
+    .small-scale{
+        transform: scale(0.46);
+    }
+}
