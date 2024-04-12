@@ -14,3 +14,10 @@ admin = {
     "email": fields.String,
     "dob": fields.String
 }
+
+income_fields = {
+    "username": fields.String,
+    "amount": fields.String,
+    "recurring": fields.String,
+    "date": fields.String
+}

@@ -35,12 +35,13 @@ app, api = create_app()
 
 # Create tables
 with app.app_context():
-    from Application.models import User, Admin
+    from Application.models import *
     db.create_all()
 
 
 from Application.models import *
 from Application.Api.login import *
+from Application.Api.income import *
 
 if __name__ == '__main__':
     app.run(debug=True)
