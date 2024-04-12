@@ -9,6 +9,9 @@
     "deploy": "yarn build && npx thirdweb@latest upload dist"
   },
   "dependencies": {
+    "@syncfusion/ej2-base": "^25.1.35",
+    "@syncfusion/ej2-react-charts": "^25.1.39",
+    "@syncfusion/ej2-react-grids": "^25.1.39",
     "@thirdweb-dev/react": "^4.4.15",
     "@thirdweb-dev/sdk": "^4.0.42",
     "ethers": "^5.7.2",

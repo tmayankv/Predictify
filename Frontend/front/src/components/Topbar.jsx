@@ -1,9 +1,11 @@
+import { useStateContext } from "../context/StateContext"
 
 const Topbar = () => {
+  const {isAuth, handleAuth} = useStateContext()
   return (
-    <div className="bg-green-500 p-3 rounded-xl flex justify-between">
+    <div className="bg-gray-700 p-3 rounded-xl flex justify-between">
       Topbar
-      <div>signOut</div>
+      <div onClick={()=> handleAuth()}>{isAuth? `signOut` :"signin"}</div>
       </div>
   )
 }

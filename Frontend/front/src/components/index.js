@@ -6,3 +6,4 @@ export { default as FundCard } from './FundCard';
 export { default as CountBox } from './CountBox';
 export { default as Loader } from './Loader';
 export { default as Topbar } from './Topbar';
+export {default as NewsBar} from './NewsBar';

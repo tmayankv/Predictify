@@ -1,16 +1,27 @@
-import React, { useContext, createContext } from 'react';
+import React, { useContext, createContext, useState } from 'react';
 
 import { useAddress, useContract, useContractWrite, useMetamask } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
+import { useNavigate } from 'react-router-dom';
 
 const StateContext = createContext();
 
+
 export const StateContextProvider = ({ children }) => {
+  const [isAuth, setisAuth] = useState(false);
   const { contract } = useContract('0xBBE125E0f383ced5EA2b264D445797C63153BBcf');
   const { mutateAsync: createCampaign } = useContractWrite(contract, 'createCampaign');
+  const [isLoading, setisLoading] = useState(true)
+  const [showBar, setshowBar] = useState(true)
 
   const address = useAddress();
   const connect = useMetamask()
+  const navigate= useNavigate()
+  const handleAuth = () =>{
+    setisAuth(!isAuth);
+    isAuth? navigate('/'): navigate('/sign-up');
+
+  }
 
   const publishCampaign = async (form) => {
     try {
@@ -32,6 +43,7 @@ export const StateContextProvider = ({ children }) => {
   }
   const getCampaigns = async () =>{
       try {
+        setisLoading(true)
         const data = await contract.call('getCampaigns');
         console.log(data)
         const parsedData=  data.map((campaign,i) => {
@@ -46,6 +58,7 @@ export const StateContextProvider = ({ children }) => {
             id: i
           }
         })
+        setisLoading(false)
         console.log(parsedData)
         return parsedData
       } catch (error) {
@@ -55,7 +68,9 @@ export const StateContextProvider = ({ children }) => {
 
   const getUserCampaigns = async () =>{
     try {
+      setisLoading(true)
       const data = await contract.call('getCampaigns');
+      setisLoading(false)
       console.log(data)
       const parsedData=  data.map((campaign,i) => {
         return {
@@ -69,6 +84,7 @@ export const StateContextProvider = ({ children }) => {
           id: i
         }
       })
+
       console.log(parsedData)
       return parsedData
     } catch (error) {
@@ -109,11 +125,17 @@ export const StateContextProvider = ({ children }) => {
       value={{ 
         address,
         contract,
+        isLoading,
         createCampaign: publishCampaign,
         getCampaigns,
         donate,
         getDonations,
-         connect
+         connect,
+         isAuth,
+         handleAuth,
+         getUserCampaigns,
+         showBar,
+         setshowBar
       }}
     >  
       {children}

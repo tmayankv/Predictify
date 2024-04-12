@@ -1,11 +1,12 @@
 import { Link, useLocation } from "react-router-dom"
 import { navlinks } from "../constants"
+import { useStateContext } from "../context/StateContext"
 
 const Sidebar = () => {
   const {pathname} = useLocation()
-  console.log(pathname)
+  const {showBar}=useStateContext()
   return (
-    <div className="flex flex-col justify-between text-center">
+    <div className={`${!showBar?'hidden':""} lg:flex flex-col justify-between text-center `}>
       <div className="flex flex-col gap-5 ">
        <p className="m-5 cursor-pointer">
         Logo
