@@ -51,4 +51,4 @@ class contactAPI(Resource):
 
 
 
-api.add_resource(contactAPI, '/api/contactform', '/api/contactform/')
+api.add_resource(contactAPI, '/api/contactform')
