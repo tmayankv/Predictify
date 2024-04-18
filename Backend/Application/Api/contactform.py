@@ -1,7 +1,6 @@
 from flask import request, session, redirect, url_for, render_template, flash, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_restful import marshal_with
-from flask_uploads import UploadSet, IMAGES, configure_uploads
 # from flask_security import login_required, current_user, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
@@ -14,25 +13,16 @@ from Application.exception import *
 from app import app, api, db
 
 
-# Initialize Flask-Uploads
-photos = UploadSet('photos', IMAGES)
-configure_uploads(app, photos)
 
 
 
 class contactAPI(Resource):
-    @marshal_with(contact_form)
+    @marshal_with(contactforms)
     def post(self):
         data = request.get_json()
         name = data.get('name')
         email = data.get('email')
         message = data.get('message')
-        # Check if 'screenshot' is in the request files
-        if 'screenshot' in request.files:
-            # Save the file
-            screenshot = photos.save(request.files['screenshot'])
-        else:
-            screenshot = None
 
         if not name:
             raise MissingParameterError(400, " name is required")
@@ -41,7 +31,7 @@ class contactAPI(Resource):
         if not message:
             raise MissingParameterError(400, "message is required")
 
-        contactform = contactform(name=name, email=email, message=message, screenshot=screenshot)
+        contactform = contactforms(name=name, email=email, message=message)
         db.session.add(contactform)
         db.session.commit()
         return {'message': 'message sent successfully'}, 201
@@ -51,4 +41,4 @@ class contactAPI(Resource):
 
 
 
-api.add_resource(contactAPI, '/api/contactform')
+api.add_resource(contactAPI, '/api/contactforms')
