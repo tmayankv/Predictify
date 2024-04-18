@@ -21,6 +21,7 @@ income_fields = {
     "recurring": fields.String,
     "date": fields.String
 }
+
 contactforms = {
     "name": fields.String,
     "email": fields.String,

@@ -75,9 +75,11 @@ class Income (db.Model):
             'recurring': self.recurring,
             'date': self.date
         }
-class contactforms (db.Model):
+    
+
+class ContactForm (db.Model):
     name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False, primary_key=True)
+    email = db.Column(db.String(100), primary_key=True)
     message = db.Column(db.String(100), nullable=False)
 
 
