@@ -55,3 +55,24 @@ class Admin(db.Model, UserMixin):
             'password': self.password,
             'dob': self.dob
         }
+    
+
+class Income (db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
+    source = db.Column(db.String(100), nullable=False)
+    recurring = db.Column(db.Boolean, nullable=False)
+    date = db.Column(db.String(100), nullable=False)
+
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'amount': self.amount,
+            'source': self.source,
+            'recurring': self.recurring,
+            'date': self.date
+        }
+
