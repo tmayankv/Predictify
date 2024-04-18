@@ -6,17 +6,13 @@ import Login from "./_auth/forms/Login"
 
 
 
-import { Home, Portfolio, Contact, AllCampaigns } from "./_root/pages/index"
+import { Home, RetirementPlanner, Contact, AllCampaigns } from "./_root/pages/index"
 import CreateCampaign from "./_root/pages/CreateCampaign"
 import { useStateContext } from "./context/StateContext"
-import { useEffect } from "react"
 CreateCampaign
 const App = () => {
   const navigate = useNavigate()
   const {isAuth} = useStateContext()
-  useEffect(() => {
-    isAuth? navigate('/login') : navigate('/')
-  }, [isAuth])
   
   return (
         <Routes>
@@ -26,9 +22,11 @@ const App = () => {
           </Route>
           <Route element={<RootLayout />} >
             <Route index element={< Home />} />
-            <Route path="/all-campaign" element={< AllCampaigns/>} />
+            <Route path="/all-campaigns" element={< AllCampaigns/>} />
             <Route path="/create-campaign" element={< CreateCampaign />} />
             <Route path="/contact" element={< Contact />} />
+            <Route path="/retirement-planner" element={< RetirementPlanner />} />
+
 
           </Route>
         </Routes>

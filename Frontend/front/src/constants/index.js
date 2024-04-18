@@ -1,5 +1,4 @@
-import { HandCoinsIcon, HomeIcon, ListPlusIcon, LogOut, UserRound, WalletCardsIcon } from "lucide-react";
-
+import { HandCoinsIcon, HomeIcon, ListPlusIcon, LogOut, UserRound, WalletCardsIcon, Blocks } from "lucide-react";
 export const navlinks = [
   {
     name: 'Home',
@@ -10,6 +9,12 @@ export const navlinks = [
     name: 'campaign',
     icon: ListPlusIcon,
     link: '/create-campaign',
+  },
+  {
+    name: 'all campaigns',
+    icon: Blocks,
+    link: '/all-campaigns',
+    disabled: true,
   },
   {
     name: 'withdraw',

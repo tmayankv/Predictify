@@ -11,7 +11,8 @@ import {Loader} from 'lucide-react'
 const CreateCampaign = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const { createCampaign } = useStateContext();
+  const { createCampaign, isAuth} = useStateContext();
+  console.log(isAuth)
   const [form, setForm] = useState({
     name: '',
     title: '',
@@ -105,7 +106,7 @@ const CreateCampaign = () => {
           />
 
           <div className="flex justify-center items-center mt-[40px]">
-           <button className="flex w-full justify-center p-3 rounded-xl bg-blue-300">Submit</button>
+           <button className="flex w-full justify-center p-3 rounded-xl bg-violet-500 text-white">Submit</button>
           </div>
       </form>
     </div>

@@ -1,6 +1,6 @@
-import React, { useContext, createContext, useState } from 'react';
+import React, { useContext, createContext, useState, useEffect } from 'react';
 
-import { useAddress, useContract, useContractWrite, useMetamask } from '@thirdweb-dev/react';
+import { useAddress, useContract, useContractWrite, useMetamask, useDisconnect} from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,11 +12,32 @@ export const StateContextProvider = ({ children }) => {
   const { contract } = useContract('0xBBE125E0f383ced5EA2b264D445797C63153BBcf');
   const { mutateAsync: createCampaign } = useContractWrite(contract, 'createCampaign');
   const [isLoading, setisLoading] = useState(true)
-  const [showBar, setshowBar] = useState(true)
+  const [showBar, setshowBar] = useState(false)
+  const[walletBalance, setWalletBalance] = useState("")
 
   const address = useAddress();
   const connect = useMetamask()
   const navigate= useNavigate()
+  const disconnect = useDisconnect()
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (address) {
+        try {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const balance = await provider.getBalance(address);
+          // Convert balance from Wei to Ether
+          const etherBalance = ethers.utils.formatEther(balance);
+          setWalletBalance(parseFloat(etherBalance));
+        } catch (error) {
+          console.error('Error fetching wallet balance:', error);
+        }
+      }
+    };
+
+    fetchBalance();
+  }, [address]);
+
   const handleAuth = () =>{
     setisAuth(!isAuth);
     isAuth? navigate('/'): navigate('/sign-up');
@@ -36,7 +57,6 @@ export const StateContextProvider = ({ children }) => {
                 ],
             });
 
-      console.log("contract call success", data)
     } catch (error) {
       console.log("contract call failure", error)
     }
@@ -45,7 +65,6 @@ export const StateContextProvider = ({ children }) => {
       try {
         setisLoading(true)
         const data = await contract.call('getCampaigns');
-        console.log(data)
         const parsedData=  data.map((campaign,i) => {
           return {
             owner: campaign.owner,
@@ -58,8 +77,8 @@ export const StateContextProvider = ({ children }) => {
             id: i
           }
         })
+
         setisLoading(false)
-        console.log(parsedData)
         return parsedData
       } catch (error) {
         console.log(error);
@@ -67,29 +86,10 @@ export const StateContextProvider = ({ children }) => {
   }
 
   const getUserCampaigns = async () =>{
-    try {
-      setisLoading(true)
-      const data = await contract.call('getCampaigns');
-      setisLoading(false)
-      console.log(data)
-      const parsedData=  data.map((campaign,i) => {
-        return {
-          owner: campaign.owner,
-          title: campaign.title,
-          description: campaign.description,
-          target: ethers.utils.formatEther(campaign.target),
-          deadline: campaign.deadline.toNumber(),
-          image: campaign.image,
-          amountCollected: ethers.utils.formatEther(campaign.amountcollected),
-          id: i
-        }
-      })
+    const allCampaigns = await getCampaigns();
+    console.log(new Date().getTime())
 
-      console.log(parsedData)
-      return parsedData
-    } catch (error) {
-      console.log(error);
-    }
+    return allCampaigns;
 }
 
   const getDonations = async (id) => {
@@ -97,7 +97,6 @@ export const StateContextProvider = ({ children }) => {
 
       const donations = await contract.call('getDonators', [id]);
       const numberOfDonations = donations[0].length;
-      console.log(donations)
       
       const parsedDonations = [];
       
@@ -107,7 +106,6 @@ export const StateContextProvider = ({ children }) => {
           donation: ethers.utils.formatEther(donations[1][i].toString())
         })
       }
-      console.log(parsedDonations)
       return parsedDonations;
     }
     catch(error) {
@@ -135,7 +133,10 @@ export const StateContextProvider = ({ children }) => {
          handleAuth,
          getUserCampaigns,
          showBar,
-         setshowBar
+         setshowBar,
+         walletBalance,
+         disconnect,
+         setWalletBalance
       }}
     >  
       {children}

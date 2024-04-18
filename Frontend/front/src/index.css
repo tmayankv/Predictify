@@ -9,8 +9,37 @@
     transition: all 0.2s linear;
 }
 
-@media (max-width: 368px){
+@media (max-width: 568px){
     .small-scale{
         transform: scale(0.46);
     }
+   
+}
+#retire-form label{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    column-gap: 12px;
+}
+#retire-form input{
+    border-radius: 50px;
+}
+.shadow-my{
+    box-shadow: 1px 1px 3px whitesmoke;
+}
+.animate-card{
+    border: 2px solid black;
+    padding: 0px 10px;
+    /* animation: anicard 2s ease-in-out infinite; */
+}
+/* @keyframes anicard {
+    from{
+        transform: scale(1);
+    }
+    to{
+        transform: scale(0.3);
+    }
+} */
+.bor-side{
+    border: 1px solid rgba(137, 20, 226, 0.819);
 }

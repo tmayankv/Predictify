@@ -1,25 +1,24 @@
 import { Outlet } from 'react-router-dom';
 import  Topbar from '../components/Topbar';
 import  Sidebar  from '../components/Sidebar';
-import { useState } from 'react';
-import CustomButton from '../components/CustomButton';
 import { useStateContext } from '../context/StateContext';
+import { Menu, CircleX} from 'lucide-react';
 const RootLayout = () => {
 const {showBar, setshowBar}= useStateContext()
   return (
-    <div className='flex bg-slate-900 h-full'>
-      <div className="m-2 flex">
+    <div className={`flex bg-slate-900 p-2 h-full`}>
+      <div className={`flex ${showBar && "mx-2"}`}>
       <Sidebar showBAr={showBar}/>
       </div>
       <div className="mt-2 w-full">
-        <div className="flex justify-between gap-2 w-full">
+        <div className="flex justify-between gap-2 w-full items-center">
 
-     <button className='text-white sm:hidden lg:block' onClick={()=> setshowBar(!showBar)}>show</button>
+     <div className='text-white sm:hidden lg:block' onClick={()=> setshowBar(!showBar)}>{showBar? <CircleX/> :<Menu />}</div>
       <div className='w-full'>
       <Topbar />
       </div>
         </div>
-    <div className="mt-2">
+    <div className="mt-2 ">
       <Outlet />
     </div>
       </div>
