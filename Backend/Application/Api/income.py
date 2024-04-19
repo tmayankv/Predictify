@@ -33,6 +33,7 @@ class IncomeAPI(Resource):
         data = request.get_json()
         username = data.get('username')
         amount = data.get('amount')
+        source = data.get('source')
         recurring = data.get('recurring')
         date = data.get('date')
 
@@ -40,12 +41,14 @@ class IncomeAPI(Resource):
             raise MissingParameterError(400, "User name is required")
         if not amount:
             raise MissingParameterError(400, "Amount is required")
+        if not source:
+            raise MissingParameterError(400, "Source is required")
         if not recurring:
             raise MissingParameterError(400, "Recurring is required")
         if not date:
             raise MissingParameterError(400, "Date is required")
         
-        income = Income(username=username, amount=amount, recurring=recurring, date=date)
+        income = Income(username=username, amount=amount, source=source, recurring=recurring, date=date)
         db.session.add(income)
         db.session.commit()
         return {'message': 'Income added successfully'}, 201
