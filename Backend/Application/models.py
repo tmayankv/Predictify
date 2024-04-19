@@ -75,4 +75,17 @@ class Income (db.Model):
             'recurring': self.recurring,
             'date': self.date
         }
+    
 
+class ContactForm (db.Model):
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), primary_key=True)
+    message = db.Column(db.String(100), nullable=False)
+
+
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'email': self.email,
+            'message': self.message
+        }
