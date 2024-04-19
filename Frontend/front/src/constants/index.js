@@ -17,20 +17,14 @@ export const navlinks = [
     disabled: true,
   },
   {
-    name: 'withdraw',
+    name: 'Income Management',
     icon: WalletCardsIcon,
-    link: '/',
+    link: '/income-management',
     disabled: true,
   },
   {
     name: 'profile',
     icon: UserRound,
     link: '/profile',
-  },
-  {
-    name: 'logout',
-    icon: LogOut,
-    link: '/',
-    disabled: true,
   },
 ];

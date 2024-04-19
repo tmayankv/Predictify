@@ -10,7 +10,7 @@ const Home = () => {
   const [Data, setData] = useState([])
   console.log(address)
 const getDetail = async () =>{
-  const data= await getUserCampaigns  ()
+  const data= await getUserCampaigns()
   console.log(data)
   setData(data)
 }
@@ -19,24 +19,23 @@ useEffect(() => {
 }, [address,contract])
 
   return (
-    <div className={`p-2 flex gap-2 rounded-md max-[815px]:flex-col flex-nowrap mt-1 h-full ${isLoading? 'flex-col h-screen':''} overflow-hidden`}>
+    <div className={`p-2 flex gap-2 ${ Data.length === 0  && 'justify-between'} rounded-md max-[815px]:flex-col flex-nowrap mt-1 h-full ${isLoading? 'flex-col h-screen':''} overflow-hidden`}>
       
       <div className="p-2">
-        <h1 className="text-center font-bold text-xl lg:text-2xl text-white italic">
+        {!isLoading && <h1 className="text-center font-bold text-xl lg:text-2xl text-white italic">
         Your Campaigns
-        </h1>
+        </h1>}
         <div className="mt-3 w-full text-xs md:text-md">
         {!isLoading? Data.slice(0,5)?.map((campaign) =>(
           <CampaignLine key={campaign.id} title={campaign.title} deadline={campaign.deadline} collection={campaign.amountCollected} campaignImage={campaign.image}/>
         ))
         :( <div className="text-center text-white text-2xl">
-          Loading
+          Loading.....
           </div>
-        )
-      }
+        )}
       {!isLoading && <div className="flex flex-col md:items-center text-white">
       Your Have {Data.length} Campaigns that are currently Live.
-      <Link to="/all-campaigns" className="font-bold underline">Get More Details-</Link>
+      <Link to="/all-campaigns" className="font-bold hover:underline">Get More Details- </Link>
       </div>}
       </div>
       </div>

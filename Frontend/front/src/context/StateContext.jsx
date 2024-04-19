@@ -26,7 +26,6 @@ export const StateContextProvider = ({ children }) => {
         try {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           const balance = await provider.getBalance(address);
-          // Convert balance from Wei to Ether
           const etherBalance = ethers.utils.formatEther(balance);
           setWalletBalance(parseFloat(etherBalance));
         } catch (error) {
@@ -39,9 +38,14 @@ export const StateContextProvider = ({ children }) => {
   }, [address]);
 
   const handleAuth = () =>{
+    console.log(isAuth)
     setisAuth(!isAuth);
-    isAuth? navigate('/'): navigate('/sign-up');
-
+    if(isAuth){
+      // disconnect();
+      // navigate('/login');
+      console.log("SDasdas")
+    }
+    isAuth? navigate('/'): navigate('/register');
   }
 
   const publishCampaign = async (form) => {
@@ -77,9 +81,10 @@ export const StateContextProvider = ({ children }) => {
             id: i
           }
         })
-
+        const datenow= new Date()
+        const filterData=  parsedData.filter(item => item.dealine > datenow.getTime())
         setisLoading(false)
-        return parsedData
+        return filterData
       } catch (error) {
         console.log(error);
       }
@@ -87,7 +92,6 @@ export const StateContextProvider = ({ children }) => {
 
   const getUserCampaigns = async () =>{
     const allCampaigns = await getCampaigns();
-    console.log(new Date().getTime())
 
     return allCampaigns;
 }

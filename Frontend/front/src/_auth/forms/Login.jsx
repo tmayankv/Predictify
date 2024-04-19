@@ -4,6 +4,9 @@ const Login= () => {
     const [username, setusername] = useState("thesam1");
     const [password, setpassword] = useState("mypassword");
 
+    const showToken = (msg) =>{
+      console.log(msg)
+    }
     const fetchBaseURL = async() => {     
           try {
             const response = await fetch('http://127.0.0.1:5000/api/login', {
@@ -22,9 +25,9 @@ const Login= () => {
               console.log('Login successful');
               console.log(data.access_token);
             } else {
-            console.error(data.message); 
+            showToken(data.message) 
         } } catch (error) { 
-            console.error('Error during login:', error); 
+          showToken(error); 
         } 
     }
    
@@ -79,7 +82,7 @@ const Login= () => {
               </div>
             </form>
             <span className="font-bold text-slate-700">Don't forget to Register your account! 
-          <Link to="/signup" className="text-xl text-blue-600 cursor-pointer"> Register Here</Link>
+          <Link to="/register" className="text-xl text-blue-600 cursor-pointer"> Register Here</Link>
             </span>
           </div>
         </div>

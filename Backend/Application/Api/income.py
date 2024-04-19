@@ -28,7 +28,7 @@ class IncomeAPI(Resource):
             return [income.to_dict() for income in incomes]
     
     
-
+  
     def post(self):
         data = request.get_json()
         username = data.get('username')

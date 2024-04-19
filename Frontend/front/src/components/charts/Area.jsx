@@ -1,5 +1,5 @@
 import { ChartComponent, SeriesCollectionDirective, SeriesDirective,
-    SplineAreaSeries, Inject, AreaSeries, DateTime, Legend } from '@syncfusion/ej2-react-charts';
+    SplineAreaSeries, Inject, AreaSeries, DateTime, Legend, Tooltip } from '@syncfusion/ej2-react-charts';
   
   const areaChartData = [
     [

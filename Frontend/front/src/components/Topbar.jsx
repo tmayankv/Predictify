@@ -3,13 +3,12 @@ import { BookUser, Unplug, Wallet2 } from "lucide-react";
 import CustomButton from "./CustomButton";
 
 const Topbar = () => {
-  const { isAuth, handleAuth, walletBalance, address, connect, disconnect, setWalletBalance } = useStateContext();
+  const { isAuth, handleAuth, walletBalance, address, connect, disconnect, setWalletBalance} = useStateContext();
   console.log(isAuth, walletBalance, address);
 
   return (
     <div className="bg-gray-700 p-2 rounded-xl flex w-full max-[350px]:justify-center justify-between items-center">
-      <div className="max-[350px]:hidden">Topbar</div>
-      {!isAuth && <CustomButton btnType={"button"} title={"Login"} handleClick={() => handleAuth()} styles={"bg-violet-600 hover:bg-slate-300 hover:text-violet-7y00"} />
+      {isAuth && <CustomButton btnType={"button"} title={"Logout"} handleClick={() => handleAuth()} styles={"bg-violet-600 hover:bg-slate-300 hover:text-violet-700 hover:text-black"} />
       }
       {isAuth && (address && walletBalance ? (
         <div className="bg-violet-400 p-2 rounded-2xl flex items-center justify-between gap-3">
@@ -33,7 +32,7 @@ const Topbar = () => {
           </div>
         </div>
       ) : (
-        <CustomButton btnType={"button"} title={"Connect to Wallet"} handleClick={() => connect()} styles={"bg-blue-500"} />
+        <CustomButton btnType={"button"} title={"Connect to Wallet"} handleClick={() => connect()} styles={"bg-violet-700"} />
       ))}
     </div>
   );
