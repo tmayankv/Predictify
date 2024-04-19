@@ -18,6 +18,7 @@ admin = {
 income_fields = {
     "username": fields.String,
     "amount": fields.String,
+    "source": fields.String,
     "recurring": fields.String,
     "date": fields.String
 }
