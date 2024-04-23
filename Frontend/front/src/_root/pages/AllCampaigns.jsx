@@ -6,9 +6,6 @@ import { LucideLoaderCircle } from 'lucide-react';
 const AllCampaigns = () => {
   const { getCampaigns, contract, address, isLoading } =useStateContext();
   const [Data, setData] = useState([])
-  const [bothCond, setBothCond] = useState([])
-  
-
   console.log(address)
 const getDetail = async () =>{
   const data= await getCampaigns()
@@ -19,9 +16,8 @@ useEffect(() => {
   if(contract) getDetail()
 }, [address,contract])
 console.log(Data)
-
   return (
-    <div className={`flex gap-5 flex-wrap justify-center ${isLoading && 'h-screen'} ${Data && 'h-screen'}`}>
+    <div className={`flex gap-5 flex-wrap justify-center ${isLoading && 'h-screen'} ${Data && 'h-max'}`}>
       {isLoading &&
       <div className="text-white text-2xl">
         <LucideLoaderCircle />

@@ -5,7 +5,7 @@ const CampaignCard = ({campaign}) => {
     console.log(campaign)
     const navigate = useNavigate()
   return (
-    <div className="text-white border-solid max-[300px]:text-sm border flex flex-col gap-4 border-gray-500 p-4 rounded-xl w-[270px] max-[300px]:w-[180px]">
+    <div className="text-white border-solid max-[300px]:text-sm border flex flex-col gap-4 border-gray-500 p-4 mb-1 rounded-xl w-[270px] max-[300px]:w-[180px]">
         <img src={campaign.image} className="rounded-t-3xl w-full h-[160px] max-[300px]:h-[100px]" alt="" />
         <div className="text-xl text-center font-bold truncate">{campaign.title}
         </div>

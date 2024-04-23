@@ -6,7 +6,7 @@ const CampaignLine = ({title, deadline, collection, campaignImage}) => {
         {title} campaign has collected {collection} of ETH and will be expired after the span of {deadline !== 'number'? daysLeft(deadline):deadline} days
     </div>
     <div className="w-[70px] lg:w-[154px]">
-      <img src={campaignImage}  style={{ borderRadius:"10%"}} alt="" />
+      <img src={campaignImage} className=" h-9 lg:h-20"  style={{ borderRadius:"10%", width:"100%"}} alt="" />
     </div>
     </div>
   )

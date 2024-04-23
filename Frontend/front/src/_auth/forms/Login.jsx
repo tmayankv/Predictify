@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useStateContext } from "../../context/StateContext";
 const Login= () => {
     const [username, setusername] = useState("thesam1");
     const [password, setpassword] = useState("mypassword");
+
+    const { handleAuth } = useStateContext()
 
     const showToken = (msg) =>{
       console.log(msg)
@@ -20,10 +23,9 @@ const Login= () => {
               }),
             });
             const data = await response.json();
-            console.log(username)
             if (response.ok) {
               console.log('Login successful');
-              console.log(data.access_token);
+              handleAuth(username, password)
             } else {
             showToken(data.message) 
         } } catch (error) { 

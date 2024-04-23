@@ -1,4 +1,4 @@
-import { HandCoinsIcon, HomeIcon, ListPlusIcon, LogOut, UserRound, WalletCardsIcon, Blocks } from "lucide-react";
+import { HandCoinsIcon, HomeIcon, ListPlusIcon, LogOut, UserRound, WalletCardsIcon, Blocks, ShieldHalf } from "lucide-react";
 export const navlinks = [
   {
     name: 'Home',
@@ -17,6 +17,11 @@ export const navlinks = [
     disabled: true,
   },
   {
+    name: 'retirement planner',
+    icon: ShieldHalf,
+    link: '/retirement-planner',
+  },
+  {
     name: 'Income Management',
     icon: WalletCardsIcon,
     link: '/income-management',
@@ -27,4 +32,5 @@ export const navlinks = [
     icon: UserRound,
     link: '/profile',
   },
+  
 ];

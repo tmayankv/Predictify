@@ -14,10 +14,10 @@ const NewsBar = () => {
     if(contract) getNews()
   }, [contract])
   return (
-    <div className="newsbar w-full rounded-2xl p-1 px-2 flex gap-2 flex-col items-center text-white text-xs">
-      <h1 className="text-2xl font-bold italic underline">Trending News</h1>
+    <div className="xl:w-full rounded-2xl p-1 flex gap-2 flex-col text-white text-xs">
+      <h1 className="xl:text-2xl text-xl font-bold italic underline flex">Trending News</h1>
       {news.slice(0,5).map((article, i)=>(
-        <div className="w-full font-semibold truncate rounded-xl p-1 cursor-pointer hover:bg-violet-700">{i+1}. {article.title}</div>
+        <div key={i} className="sm:w-10/12 lg:w-full font-semibold rounded-xl p-1 cursor-pointer hover:bg-violet-700">{i+1}. {article.title}</div>
       ))}
     </div>
   )

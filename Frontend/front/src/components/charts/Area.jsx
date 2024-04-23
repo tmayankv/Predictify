@@ -1,5 +1,4 @@
-import { ChartComponent, SeriesCollectionDirective, SeriesDirective,
-    SplineAreaSeries, Inject, AreaSeries, DateTime, Legend, Tooltip } from '@syncfusion/ej2-react-charts';
+Responsi
   
   const areaChartData = [
     [
@@ -57,36 +56,19 @@ import { ChartComponent, SeriesCollectionDirective, SeriesDirective,
   };
   function Area() {
     return (
-      <div className=" flex items-center justify-center p-2 rounded-xl w-full">
-      <ChartComponent
-        id="line-chart"
-        className="min-[390px]:w-[85%] max-[1200px]:w-[88%] max-[225px]:w-[65%]"
-        height="80%"  // Set height using vh (viewport height)
-        // Set width using percentage
-        primaryXAxis={areaPrimaryXAxis}
-        primaryYAxis={areaPrimaryYAxis}
-        chartArea={{ border: { width: 0 } }}
-        tooltip={{ enable: true }}
-        rangeColorSettings={{ color: "white"}}
-        >
-        <Inject services={[Legend, DateTime, AreaSeries, SplineAreaSeries]} />
-        <SeriesCollectionDirective>
-          {areaCustomSeries.map((item, index) => (
-            <SeriesDirective
-            key={index}
-            dataSource={item.dataSource}
-            xName={item.xName}
-            yName={item.yName}
-            name={item.name}
-            opacity={item.opacity}
-            type={item.type}
-            width={item.width}
-            fill={item.fill}
-            />
-          ))}
-        </SeriesCollectionDirective>
-      </ChartComponent>
-          </div>
+      <ResponsiveContainer width="100%" height={400}>
+ <BarChart
+      series={[
+        { data: [35, 44, 24, 34] },
+        { data: [51, 6, 49, 30] },
+        { data: [15, 25, 30, 50] },
+        { data: [60, 50, 15, 25] },
+      ]}
+      height={290}
+      xAxis={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'], scaleType: 'band' }]}
+      margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+    />
+    </ResponsiveContainer>
     );
   }
   export default Area;

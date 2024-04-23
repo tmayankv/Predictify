@@ -3,6 +3,7 @@ import React, { useContext, createContext, useState, useEffect } from 'react';
 import { useAddress, useContract, useContractWrite, useMetamask, useDisconnect} from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 import { useNavigate } from 'react-router-dom';
+import { daysLeft } from '../utils';
 
 const StateContext = createContext();
 
@@ -12,8 +13,12 @@ export const StateContextProvider = ({ children }) => {
   const { contract } = useContract('0xBBE125E0f383ced5EA2b264D445797C63153BBcf');
   const { mutateAsync: createCampaign } = useContractWrite(contract, 'createCampaign');
   const [isLoading, setisLoading] = useState(true)
-  const [showBar, setshowBar] = useState(false)
+  const [showBar, setshowBar] = useState(true)
   const[walletBalance, setWalletBalance] = useState("")
+  const [logInfo, setLogInfo] = useState({
+    username: "",
+    password:""
+  })
 
   const address = useAddress();
   const connect = useMetamask()
@@ -21,6 +26,9 @@ export const StateContextProvider = ({ children }) => {
   const disconnect = useDisconnect()
 
   useEffect(() => {
+    if (localStorage.getItem('authentication') === false){
+        navigate('/login')
+    }
     const fetchBalance = async () => {
       if (address) {
         try {
@@ -33,19 +41,32 @@ export const StateContextProvider = ({ children }) => {
         }
       }
     };
-
     fetchBalance();
+   
   }, [address]);
 
-  const handleAuth = () =>{
-    console.log(isAuth)
+  const handleLogInfo = (user, pass) =>{
+    setLogInfo({username:user, password:pass})
+    console.log(user)
+    console.log(pass)
+  }
+  const handleAuth = (user, pass) =>{
     setisAuth(!isAuth);
     if(isAuth){
-      // disconnect();
-      // navigate('/login');
-      console.log("SDasdas")
+    localStorage.setItem('authentication', true);
+    localStorage.setItem('username', user)
+    localStorage.setItem('password', pass)
+      navigate('/')
     }
-    isAuth? navigate('/'): navigate('/register');
+    else{
+      disconnect();
+    localStorage.setItem('authentication', false)
+    localStorage.removeItem('username')
+    localStorage.removeItem('password')
+    localStorage.setItem('username', user)
+    localStorage.setItem('password', pass)
+      navigate('/login');
+    }
   }
 
   const publishCampaign = async (form) => {
@@ -82,7 +103,9 @@ export const StateContextProvider = ({ children }) => {
           }
         })
         const datenow= new Date()
-        const filterData=  parsedData.filter(item => item.dealine > datenow.getTime())
+        console.log(daysLeft(parsedData.deadline))
+        console.log(typeof daysLeft(parsedData.deadline))
+        const filterData=  parsedData.filter(item => !daysLeft(item.deadline).startsWith('-'))
         setisLoading(false)
         return filterData
       } catch (error) {
@@ -140,7 +163,9 @@ export const StateContextProvider = ({ children }) => {
          setshowBar,
          walletBalance,
          disconnect,
-         setWalletBalance
+         setWalletBalance,
+         handleLogInfo,
+         logInfo
       }}
     >  
       {children}

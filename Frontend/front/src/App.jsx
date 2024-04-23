@@ -3,13 +3,16 @@ import RootLayout from "./_root/RootLayout"
 import AuthLayout from "./_auth/AuthLayout"
 import Register from "./_auth/forms/Register"
 import Login from "./_auth/forms/Login"
+ import { useEffect } from "react"
 
+import { Home, RetirementPlanner, Contact, AllCampaigns,IncomeComponent, Profile, CreateCampaign, CampaignDetails} from "./_root/pages/index"
 
-
-import { Home, RetirementPlanner, Contact, AllCampaigns,IncomeComponent} from "./_root/pages/index"
-import CreateCampaign from "./_root/pages/CreateCampaign"
-CreateCampaign
 const App = () => {
+  const navigate = useNavigate()
+  useEffect(() =>{
+    {localStorage.getItem('authentication') ==="false" && navigate('/login')}
+    console.log(localStorage.getItem('authentication'))
+  },[localStorage.getItem('authentication')])
 
   return (
         <Routes>
@@ -21,11 +24,14 @@ const App = () => {
             <Route index element={< Home />} />
             <Route path="/all-campaigns" element={< AllCampaigns/>} />
             <Route path="/create-campaign" element={< CreateCampaign />} />
+            <Route path="/campaign-details/:id" element={< CampaignDetails />} />
             <Route path="/contact" element={< Contact />} />
             <Route path="/retirement-planner" element={< RetirementPlanner />} />
             <Route path="/income-management" element={< IncomeComponent />} />
+            <Route path="/profile" element={< Profile />} />
+
           </Route>
-        </Routes>
+      </Routes>
   )
 }
 
