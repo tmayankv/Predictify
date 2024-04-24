@@ -38,7 +38,7 @@ useEffect(() => {
           <HomeBox title={"Wallet's Balance"} icon1={<Wallet2 size={18} />} msg={walletBalance} />
         </div>
         <div className="flex gap-2 mx-2">
-        <div className="p-3 flex flex-col gap-3 rounded-xl w-1/2 bg-gradient-to-t from-violet-900 to-black text-white">
+        <div className="p-3 flex flex-col gap-3 rounded-xl md:w-1/2 bg-gradient-to-b from-indigo-900 to-black text-white">
          <div>
            Welcome Back,
           <div className="capitalize ml-16 text-2xl">{localStorage.getItem('username')}</div>
@@ -58,17 +58,17 @@ useEffect(() => {
           </p>
           </div>
           </div>):(
-              <div className="flex flex-col w-1/2 gap-2 mt-3"> Click Here to connect to Wallet
+              <div className="flex flex-col md:w-1/2 gap-2 mt-3"> Click Here to connect to Wallet
               
               <p className="w-1/2 ">
-             <CustomButton btnType={"button"} title={"Connect to Wallet"} handleClick={() => connect()} styles={"bg-gradient-to-r from-violet-500 to-blue-600"} />
+             <CustomButton btnType={"button"} title={"Connect to Wallet"} handleClick={() => connect()} styles={"bg-indigo-500"} />
                 </p> 
               </div>)
           
         }
           </div>
         </div>
-        <div className="p-3 rounded-xl w-3/4 bg-gradient-to-t from-violet-900 to-black text-white">
+        <div className="p-3 rounded-xl md:w-3/4 bg-gradient-to-b from-indigo-900 to-black text-white">
           Welcome Back,
           <div></div>
         </div>
@@ -95,8 +95,8 @@ useEffect(() => {
       </div>
       {!isLoading &&
       <div className="flex flex-col items-center w-full xl:w-1/2 gap-2">
-        <NewsBar />
         <Area />
+        <NewsBar />
       </div>}
     </div>
         </div>

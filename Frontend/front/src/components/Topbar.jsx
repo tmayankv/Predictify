@@ -12,11 +12,11 @@ const Topbar = () => {
     <div className=" flex flex-shrink justify-between items-center">
 
 
-      {isAuth && <CustomButton btnType={"button"} title={"Logout"} handleClick={() => handleAuth()} styles={" bg-violet-600 hover:bg-slate-300 hover:text-violet-700 hover:text-black"} />
+      {isAuth && <CustomButton btnType={"button"} title={"Logout"} handleClick={() => handleAuth()} styles={" bg-indigo-500 p-2 hover:bg-slate-300 hover:text-black hover:text-black"} />
       }
       <div className=" gap-3 justify-between hidden sm:flex">
-      {toplinks.map((parts) =>(
-        <Link to={parts.link} key={parts.name} className={`p-3 rounded-lg text-xs hover:bg-slate-700 group text-white flex max-[300px]:w-[40px] gap-2 justify-center sm:w-[40px] lg:w-full cursor-pointer transition-all capitalize items-center`}>
+      {toplinks.map((parts,i) =>(
+        <Link to={parts.link} key={parts.i} className={`p-3 rounded-lg text-xs hover:bg-slate-700 group text-white flex max-[300px]:w-[40px] gap-2 justify-center sm:w-[40px] lg:w-full cursor-pointer transition-all capitalize items-center`}>
         <p className="p-2  rounded-md text-white group-hover:bg-violet-600 transition-all ">
         <parts.icon size={16} />
           </p>
@@ -37,7 +37,7 @@ const Topbar = () => {
           </div>
         </div>
       ) : (
-        <CustomButton btnType={"button"} title={"Connect to Wallet"} handleClick={() => connect()} styles={"bg-violet-700"} />
+        <CustomButton btnType={"button"} title={"Connect to Wallet"} handleClick={() => connect()} styles={"bg-indigo-500 p-2"} />
       ))}
     </div>
   );
