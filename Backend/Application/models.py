@@ -89,3 +89,24 @@ class ContactForm (db.Model):
             'email': self.email,
             'message': self.message
         }
+
+class Retirement (db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String, nullable=False)
+    risk = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(100), nullable=False)
+    performance = db.Column(db.String(100), nullable=False)
+    expertrating = db.Column(db.Float, nullable=False)
+
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'category': self.category,
+            'risk': self.risk,
+            'description': self.description,
+            'performance': self.performance,
+            'expertrating': self.expertrating
+        }

@@ -28,4 +28,13 @@ contactforms = {
     "email": fields.String,
     "message": fields.String
 }
+
+retirement_fields={
+    "name": fields.String,
+    "category": fields.String,
+    "risk": fields.String,
+    "discription": fields.String,
+    "performances": fields.String,
+    "expertrating": fields.Float
+}
     
