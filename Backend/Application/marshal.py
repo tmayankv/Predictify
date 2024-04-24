@@ -20,7 +20,9 @@ income_fields = {
     "amount": fields.String,
     "source": fields.String,
     "recurring": fields.String,
-    "date": fields.String
+    "day": fields.Integer,
+    "month": fields.Integer,
+    "year": fields.Integer
 }
 
 contactforms = {
@@ -37,4 +39,10 @@ retirement_fields={
     "performances": fields.String,
     "expertrating": fields.Float
 }
-    
+expense_schema={
+    "id": fields.Integer,
+    "username": fields.String,
+    "name": fields.String,
+    "category": fields.String,
+    "amount": fields.String
+}

@@ -44,6 +44,7 @@ from Application.Api.login import *
 from Application.Api.income import *
 from Application.Api.contactforms import *
 from Application.Api.retirement import *
+from Application.Api.expense import *
 
 if __name__ == '__main__':
     app.run(debug=True)
