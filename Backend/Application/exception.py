@@ -12,3 +12,7 @@ class MissingParameterError(HTTPException):
 class InvalidParameterError(HTTPException):
     def __init__(self, status_code, status_message):
         self.response = make_response(status_message,status_code)
+
+class CustomError(HTTPException):
+    def __init__(self, status_code, status_message):
+        self.response = make_response(status_message,status_code)

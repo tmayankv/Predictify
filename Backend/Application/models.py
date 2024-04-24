@@ -63,7 +63,9 @@ class Income (db.Model):
     amount = db.Column(db.Integer, nullable=False)
     source = db.Column(db.String(100), nullable=False)
     recurring = db.Column(db.Boolean, nullable=False)
-    date = db.Column(db.String(100), nullable=False)
+    day = db.Column(db.Integer, nullable=False)
+    month = db.Column(db.Integer, nullable=False)
+    year = db.Column(db.Integer, nullable=False)
 
 
     def to_dict(self):
@@ -73,7 +75,9 @@ class Income (db.Model):
             'amount': self.amount,
             'source': self.source,
             'recurring': self.recurring,
-            'date': self.date
+            'day': self.day,
+            'month': self.month,
+            'year': self.year
         }
     
 
@@ -88,4 +92,39 @@ class ContactForm (db.Model):
             'name': self.name,
             'email': self.email,
             'message': self.message
+        }
+
+class Retirement (db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String, nullable=False)
+    risk = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(100), nullable=False)
+    performance = db.Column(db.String(100), nullable=False)
+    expertrating = db.Column(db.Float, nullable=False)
+
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'category': self.category,
+            'risk': self.risk,
+            'description': self.description,
+            'performance': self.performance,
+            'expertrating': self.expertrating
+        }
+class Expense(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    category = db.Column(db.String(80), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'name': self.name,
+            'category': self.category,
+            'amount': self.amount
         }
