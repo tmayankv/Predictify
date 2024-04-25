@@ -1,7 +1,6 @@
 from flask import request, session, redirect, url_for, render_template, flash, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_restful import marshal_with
-# from flask_security import login_required, current_user, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 import hashlib

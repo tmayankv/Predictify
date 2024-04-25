@@ -5,7 +5,7 @@ import Register from "./_auth/forms/Register"
 import Login from "./_auth/forms/Login"
  import { useEffect } from "react"
 
-import { Home, RetirementPlanner, Contact, AllCampaigns,IncomeComponent, Profile, CreateCampaign, CampaignDetails} from "./_root/pages/index"
+import { Home, RetirementPlanner, Contact, AllCampaigns,IncomeComponent, Profile, CreateCampaign, CampaignDetails, Billing} from "./_root/pages/index"
 
 const App = () => {
   const navigate = useNavigate()
@@ -29,6 +29,8 @@ const App = () => {
             <Route path="/retirement-planner" element={< RetirementPlanner />} />
             <Route path="/income-management" element={< IncomeComponent />} />
             <Route path="/profile" element={< Profile />} />
+            <Route path="/billing" element={< Billing />} />
+
 
           </Route>
       </Routes>
