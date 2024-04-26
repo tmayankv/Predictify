@@ -1,110 +1,116 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Pencil } from 'lucide-react';
 
 const Profile = () => {
-  const [profile, setProfile] = useState((localStorage.getItem('username')) || {
-    name: '',
-    email: '',
-    address: '',
-    phone: '',
-    countryCode: '',
-    image: '',
-    bio: '',
-    dob: '',
-    gender: '',
-    password: '',
-  });
-  const [editMode, setEditMode] = useState(false);
-  const [editedProfile, setEditedProfile] = useState({ ...profile });
-
-  console.log(localStorage.getItem('username'))
-  useEffect(() => {
-    fetchBio();
-  }, []);
-
-  const fetchBio = () => {
-    fetch(`http://127.0.0.1:5000/api/profile/${localStorage.getItem("username")}`) // Assuming this endpoint returns the user's profile including bio
-      .then((response) => response.json())
-      .then((data) => setProfile(data))
-      .catch((error) => console.error('Error fetching profile:', error));
+  const initialUser = {
+    name: 'John Doe',
+    email: 'johndoe@example.com',
+    address: '123 Main Street, Cityville',
+    phone: '123-456-7890',
+    countryCode: '+1',
+    image: 'https://s3.amazonaws.com/creativetim_bucket/products/137/thumb/argon-dashboard-pro.jpg?1637855868',
   };
-  console.log(profile);
+
+  const [user, setUser] = useState({ ...initialUser });
+  const [editMode, setEditMode] = useState(false);
+  const [editedUser, setEditedUser] = useState({ ...initialUser });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedProfile((prev) => ({ ...prev, [name]: value }));
+    setEditedUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleEdit = () => {
+  const handleEdit = (field) => {
     setEditMode(true);
-    setEditedProfile({ ...profile });
+    setEditedUser({ ...user });
   };
 
   const handleSave = () => {
-    // Perform validation and update profile API call
-    fetch(`http://127.0.0.1:5000/api/profile/${localStorage.getItem("username")}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(editedProfile),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Failed to update profile');
-      })
-      .then((data) => {
-        setProfile(data);
-        setEditMode(false);
-      })
-      .catch((error) => console.error('Error updating profile:', error));
-  };
+  if (!editedUser.name.trim()) {
+    alert('Name is required.');
+    return;
+  }
 
-  const handleImageChange = (e) => {
-    // Handle image upload using /upload endpoint
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('image', file);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(editedUser.email)) {
+    alert('Invalid email format.');
+    return;
+  }
 
-    fetch('http://127.0.0.1:5000/upload', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Image uploaded:', data);
-        setEditedProfile((prev) => ({ ...prev, image: data.image_url }));
-      })
-      .catch((error) => console.error('Error uploading image:', error));
-  };
+  if (!editedUser.address.trim()) {
+    alert('Address is required.');
+    return;
+  }
 
-  const handleCancel = () => {
-    setEditedProfile({ ...profile });
+  const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+  if (!phoneRegex.test(editedUser.phone)) {
+    alert('Invalid phone number format. Use xxx-xxx-xxxx.');
+    return;
+  }
+
+  if (editedUser.countryCode.length !== 2) {
+    alert('Country code must be 2 characters long.');
+    return;
+  }
+
+  const allowedTypes = ['image/jpeg', 'image/png'];
+  const maxSize = 5 * 1024 * 1024;
+  if (editedUser.imageFile) {
+    if (!allowedTypes.includes(editedUser.imageFile.type)) {
+      alert('Invalid image type. Please upload a JPEG or PNG file.');
+      return;
+    }
+    if (editedUser.imageFile.size > maxSize) {
+      alert('Image size exceeds 1MB limit. Please upload a smaller image.');
+      return;
+    }
+  }
+
+    setUser({ ...editedUser });
     setEditMode(false);
   };
 
+  const handleCancel = () => {
+    setEditedUser({ ...user });
+    setEditMode(false);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setEditedUser((prev) => ({ ...prev, image: reader.result }));
+      console.log(render.result)
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+      console.log(reader.result);
+    }
+  };
 
   return (
     <div className="container mx-auto mt-8">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">User Profile</h1>
+        
       </div>
       <div className="flex flex-col gap-4">
-        <div className="flex items-center">
-          {editMode && <label className="w-32">Image:</label>}
-          <div className="relative">
-            <img src={editedProfile.image} alt="Profile" className="w-32 h-32 rounded-full" />
-            {editMode && (
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="bg-gray-100 border z-10 border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+      <div className="flex items-center">
+        {
+         editMode && <label className="w-32">Image:</label>
+        }
+        <div className="relative">
+              <img src={user.image} alt="Profile" className="w-32 h-32 rounded-full" />
+            <Pencil>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="bg-gray-100 border absolute z-10 border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
                 />
-            )}
-          </div>
+              </Pencil>
         </div>
+          </div>
         <div className="flex items-center">
           <label className="w-32">Name:</label>
           {editMode ? (
@@ -112,122 +118,118 @@ const Profile = () => {
               <input
                 type="text"
                 name="name"
-                value={editedProfile.name}
+                value={editedUser.name}
                 onChange={handleInputChange}
                 className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
               />
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none ml-4"
-                onClick={handleEdit}
+                onClick={() => handleEdit('name')}
               >
                 Edit
               </button>
             </>
           ) : (
-            <input
-              type="text"
-              name="name"
-              value={profile.name}
-              onChange={handleInputChange}
-              className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
-            />
+            <p>{user.name}</p>
           )}
         </div>
         <div className="flex items-center">
           <label className="w-32">Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={profile.email}
-            onChange={handleInputChange}
-            className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="flex items-center">
-          <label className="w-32">Address:</label>
-          <input
-            type="text"
-            name="address"
-            value={profile.address}
-            onChange={handleInputChange} 
-            className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="flex items-center">
-          <label className="w-32">Phone:</label>
-          <input
-            type="text"
-            name="phone"
-            value={profile.phone}
-            onChange={handleInputChange} 
-            className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        {/* Other input fields */}
-        <div className="flex items-center">
-          <label className="w-32">Bio:</label>
-          <input
-            type="text"
-            name="bio"
-            value={profile.bio}
-            onChange={handleInputChange}
-            className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="flex items-center">
-          <label className="w-32">Date of Birth:</label>
-          <input
-            type="date"
-            name="dob"
-            value={profile.dob}
-            onChange={handleInputChange}
-            className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="flex items-center">
-          <label className="w-32">Gender:</label>
-          <input
-            type="text"
-            name="gender"
-            value={profile.gender}
-            onChange={handleInputChange}
-            className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="flex items-center">
-          <label className="w-32">Password:</label>
-          <input
-            type="password"
-            name="password"
-            value="********"
-            disabled 
-            className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="flex justify-center gap-4">
           {editMode ? (
             <>
+              <input
+                type="email"
+                name="email"
+                value={editedUser.email}
+                onChange={handleInputChange}
+                className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+              />
               <button
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none"
-                onClick={handleSave}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none ml-4"
+                onClick={() => handleEdit('email')}
               >
-                Save
-              </button>
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none"
-                onClick={ handleCancel }
-              >
-                Cancel
+                Edit
               </button>
             </>
           ) : (
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
-              onClick={handleEdit}
-            >
-              Edit Profile
-            </button>
+            <p>{user.email}</p>
           )}
+        </div>
+        <div className="flex items-center">
+          <label className="w-32">Address:</label>
+          {editMode ? (
+            <>
+              <input
+                type="text"
+                name="address"
+                value={editedUser.address}
+                onChange={handleInputChange}
+                className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+              />
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none ml-4"
+                onClick={() => handleEdit('address')}
+              >
+                Edit
+              </button>
+            </>
+          ) : (
+            <p>{user.address}</p>
+          )}
+        </div>
+        <div className="flex items-center">
+          <label className="w-32">Phone:</label>
+          {editMode ? (
+            <>
+              <input
+                type="text"
+                name="countryCode"
+                value={editedUser.countryCode}
+                onChange={handleInputChange}
+                className="w-20 bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+              />
+              <input
+                type="text"
+                name="phone"
+                value={editedUser.phone}
+                onChange={handleInputChange}
+                className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+              />
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none ml-4"
+                onClick={() => handleEdit('phone')}
+              >
+                Edit
+              </button>
+            </>
+          ) : (
+            <p>{`${user.countryCode} ${user.phone}`}</p>
+          )}
+        </div>
+        <div className="flex justify-center gap-4">
+        {editMode ? (
+          <>
+            <button
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none"
+              onClick={handleSave}
+            >
+              Save
+            </button>
+            <button
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+            onClick={() => handleEdit('all')}
+          >
+            Edit All
+          </button>
+        )}
         </div>
       </div>
     </div>

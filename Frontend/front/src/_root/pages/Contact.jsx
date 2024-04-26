@@ -39,7 +39,7 @@ const Contact = () => {
       }
 
       const data = await response.json();
-      console.log(data); // Handle success message or redirect as needed
+      console.log(data);
     } catch (error) {
       console.error('Error submitting form:', error);
       setFormError('Error submitting form. Please try again later.');
