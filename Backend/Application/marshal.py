@@ -28,7 +28,8 @@ income_fields = {
 contactforms = {
     "name": fields.String,
     "email": fields.String,
-    "message": fields.String
+    "message": fields.String,
+    "image": fields.String
 }
 
 retirement_fields={
@@ -45,4 +46,16 @@ expense_schema={
     "name": fields.String,
     "category": fields.String,
     "amount": fields.String
+}
+profile={
+    "id": fields.Integer,
+    "username": fields.String,
+    "phone": fields.String,
+    "email": fields.String,
+    "password": fields.String,
+    "name": fields.String,
+    "bio": fields.String,
+    "dob": fields.String,
+    "gender": fields.String,
+    "image": fields.String
 }
