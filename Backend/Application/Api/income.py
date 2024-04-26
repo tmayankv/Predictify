@@ -17,14 +17,14 @@ from app import app, api, db
 class IncomeAPI(Resource):
     @marshal_with(income_fields)
     def get(self, id=None, username=None):
-        if id:
-            income = Income.query.get(id)
+        if username:
+            income = Income.query.filter_by(username=username).first()
             if income:
                 return income.to_dict()
             else:
                 raise NotFoundError(404, 'Income not found')
-        elif username:
-            incomes = Income.query.filter_by(username=username).all()
+        elif id:
+            incomes = Income.query.get(id)
             if incomes:
                 return [income.to_dict() for income in incomes]
             else:
@@ -93,5 +93,5 @@ class GraphAPI(Resource):
 
 
 
-api.add_resource(IncomeAPI, '/api/income', '/api/income/<int:id>')
+api.add_resource(IncomeAPI, '/api/income', '/api/income/<string:username>')
 api.add_resource(GraphAPI, '/api/graph/<string:username>')
