@@ -45,8 +45,6 @@ from Application.Api.income import *
 from Application.Api.contactforms import *
 from Application.Api.retirement import *
 from Application.Api.expense import *
-from Application.Api.profile import *
-from Application.Api.cards import *
 
 if __name__ == '__main__':
     app.run(debug=True)
