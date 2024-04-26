@@ -2,11 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager
-from flask import Flask, jsonify
-from flask_cors import CORS
-
-app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
+# from flask_cors import CORS
 
 from Application.config import LocalDevelopmentConfig, db
 from Application.models import * # Import your User and Admin models
