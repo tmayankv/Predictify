@@ -26,9 +26,10 @@ export const StateContextProvider = ({ children }) => {
   const disconnect = useDisconnect()
 
   useEffect(() => {
+    if(!localStorage) localStorage.setItem('authentication', false)
     if (localStorage.getItem('authentication') === false){
         navigate('/login')
-    }
+      }
     const fetchBalance = async () => {
       if (address) {
         try {
@@ -42,8 +43,7 @@ export const StateContextProvider = ({ children }) => {
       }
     };
     fetchBalance();
-   
-  }, [address]);
+  }, [address], localStorage.getItem('authentication'));
 
   const handleLogInfo = (user, pass) =>{
     setLogInfo({username:user, password:pass})

@@ -85,13 +85,15 @@ class ContactForm (db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), primary_key=True)
     message = db.Column(db.String(100), nullable=False)
+    image = db.Column(db.String(100), nullable=False)
 
 
     def to_dict(self):
         return {
             'name': self.name,
             'email': self.email,
-            'message': self.message
+            'message': self.message,
+            'image': self.image
         }
 
 class Retirement (db.Model):
@@ -128,3 +130,37 @@ class Expense(db.Model):
             'category': self.category,
             'amount': self.amount
         }
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False)
+    phone = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    bio = db.Column(db.String(100), nullable=False)
+    dob = db.Column(db.String(80), nullable=False)
+    gender = db.Column(db.String(80), nullable=False)
+    image = db.Column(db.String(80), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'phone': self.phone,
+            'email': self.email,
+            'password': self.password,
+            'name': self.name,
+            'bio': self.bio,
+            'dob': self.dob,
+            'gender': self.gender,
+            'image': self.image
+        }
+
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
+    data = db.Column(db.LargeBinary)
+
+    def __init__(self, name, data):
+        self.name = name
+        self.data = data

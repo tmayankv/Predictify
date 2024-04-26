@@ -23,6 +23,7 @@ class contactAPI(Resource):
         name = data.get('name')
         email = data.get('email')
         message = data.get('message')
+        image = data.get('image')
 
         if not name:
             raise MissingParameterError(400, "name is required")
@@ -30,11 +31,14 @@ class contactAPI(Resource):
             raise MissingParameterError(400, "email is required")
         if not message:
             raise MissingParameterError(400, "message is required")
+        if not image:
+            raise MissingParameterError(400, "image is required")
 
         contactform = ContactForm()
         contactform.name = name
         contactform.email = email
         contactform.message = message
+        contactform.image = image
 
         db.session.add(contactform)
         db.session.commit()
