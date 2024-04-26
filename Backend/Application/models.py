@@ -82,18 +82,19 @@ class Income (db.Model):
     
 
 class ContactForm (db.Model):
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), primary_key=True)
+    username = db.Column(db.String(100), primary_key=True, nullable=False)
+    email = db.Column(db.String(100),nullable=False)
     message = db.Column(db.String(100), nullable=False)
     image = db.Column(db.String(100), nullable=False)
-
+    complaint_number = db.Column(db.String(100), nullable=False)
 
     def to_dict(self):
         return {
-            'name': self.name,
+            'username': self.username,
             'email': self.email,
             'message': self.message,
-            'image': self.image
+            'image': self.image,
+            'complaint_number': self.complaint_number
         }
 
 class Retirement (db.Model):
@@ -131,20 +132,18 @@ class Expense(db.Model):
             'amount': self.amount
         }
 class Profile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), nullable=False)
-    phone = db.Column(db.String(80), nullable=False)
+    username = db.Column(db.String(80),primary_key=True, nullable=False)
+    phone = db.Column(db.Integer)
     email = db.Column(db.String(80), nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    name = db.Column(db.String(80), nullable=False)
-    bio = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(80))
+    bio = db.Column(db.String(100))
     dob = db.Column(db.String(80), nullable=False)
-    gender = db.Column(db.String(80), nullable=False)
-    image = db.Column(db.String(80), nullable=False)
+    gender = db.Column(db.String(80))
+    image = db.Column(db.String(80))
 
     def to_dict(self):
         return {
-            'id': self.id,
             'username': self.username,
             'phone': self.phone,
             'email': self.email,
@@ -164,3 +163,24 @@ class Image(db.Model):
     def __init__(self, name, data):
         self.name = name
         self.data = data
+
+class Card(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False)
+    cardnumber = db.Column(db.Integer, nullable=False)
+    cardtype = db.Column(db.String, nullable=False)
+    cvv = db.Column(db.Integer, nullable=False)
+    expirymonth = db.Column(db.Integer, nullable=False)
+    expiryyear = db.Column(db.Integer, nullable=False)
+    balance = db.Column(db.Integer, nullable=False)
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'cardnumber': self.cardnumber,
+            'cardtype': self.cardtype,
+            'cvv': self.cvv,
+            'expirymonth': self.expirymonth,
+            'expiryyear': self.expiryyear,
+            'balance': self.balance
+        }

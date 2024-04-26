@@ -23,10 +23,10 @@ class IncomeAPI(Resource):
                 return income.to_dict()
             else:
                 raise NotFoundError(404, 'Income not found')
-        elif id:
-            incomes = Income.query.get(id)
-            if incomes:
-                return [income.to_dict() for income in incomes]
+        if id is not None:  # Change this condition to check if id is not None
+            income = Income.query.filter_by(id=id).first()
+            if income:
+                return income.to_dict()
             else:
                 raise NotFoundError(404, 'Income not found')
         else:
@@ -93,5 +93,5 @@ class GraphAPI(Resource):
 
 
 
-api.add_resource(IncomeAPI, '/api/income', '/api/income/<string:username>')
+api.add_resource(IncomeAPI, '/api/income', '/api/income/<string:username>','/api/income/<int:id>')
 api.add_resource(GraphAPI, '/api/graph/<string:username>')

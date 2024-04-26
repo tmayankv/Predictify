@@ -60,6 +60,10 @@ class RegisterApI (Resource):
                 user = User(username=username, email=email, password=pass_hash, dob=dob)
                 db.session.add(user)
                 db.session.commit()
+
+                profile = Profile(username=user.username, email=user.email, password=user.password, dob=user.dob)
+                db.session.add(profile)
+                db.session.commit()
                 token = create_access_token(identity=user.username)
                 return {'access_token': token}, 201
             else:
