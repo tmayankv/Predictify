@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager
-from flask_cors import CORS
+# from flask_cors import CORS
 
 from Application.config import LocalDevelopmentConfig, db
 from Application.models import * # Import your User and Admin models
@@ -19,7 +19,7 @@ def create_app():
     api = Api(app)
 
     # Initialize CORS
-    CORS(app)
+    # CORS(app)
 
     # Initialize Flask-Login
     login_manager = LoginManager()
