@@ -11,7 +11,7 @@ app = None
 api = None
 base_url = 'http://127.0.0.1:5000'
 
-CORS(app,origins="http://localhost:5173")
+CORS(app,origins="*")
 
 def create_app():
     app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -20,7 +20,7 @@ def create_app():
     api = Api(app)
 
     # Initialize CORS
-    CORS(app,origins="http://localhost:5173")
+    CORS(app,origins="*")
 
     # Initialize Flask-Login
     login_manager = LoginManager()
