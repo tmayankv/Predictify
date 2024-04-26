@@ -19,7 +19,7 @@ def create_app():
     api = Api(app)
 
     # Initialize CORS
-    CORS(app)
+    CORS(app,origins="http://localhost:5173")
 
     # Initialize Flask-Login
     login_manager = LoginManager()
