@@ -23,6 +23,7 @@
 }
 #retire-form input{
     border-radius: 50px;
+    background-color: black;
 }
 .shadow-my{
     box-shadow: 1px 1px 3px whitesmoke;

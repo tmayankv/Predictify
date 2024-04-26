@@ -1,10 +1,10 @@
 from flask import request, session, redirect, url_for, render_template, flash, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_restful import marshal_with
-# from flask_security import login_required, current_user, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 import hashlib
+import json
 
 
 from Application.models import *
@@ -16,11 +16,17 @@ from app import app, api, db
 
 class IncomeAPI(Resource):
     @marshal_with(income_fields)
-    def get(self, id=None):
+    def get(self, id=None, username=None):
         if id:
             income = Income.query.get(id)
             if income:
                 return income.to_dict()
+            else:
+                raise NotFoundError(404, 'Income not found')
+        elif username:
+            incomes = Income.query.filter_by(username=username).all()
+            if incomes:
+                return [income.to_dict() for income in incomes]
             else:
                 raise NotFoundError(404, 'Income not found')
         else:
@@ -59,9 +65,33 @@ class IncomeAPI(Resource):
         db.session.commit()
         return {'message': 'Income added successfully'}, 201
     
-        
 
+
+
+class Date:
+    def __init__(self, day, month, year):
+        self.day = day
+        self.month = month
+        self.year = year
+
+
+
+class GraphAPI(Resource):
+    def get(self, username):
+        incomes = Income.query.filter_by(username=username).all()
+        final = []
+        for income in incomes:
+            inc_dict = {}
+            inc_dict["x"] = Date(income.day, income.month, income.year).__dict__
+            inc_dict["y"] = income.amount
+            final.append(inc_dict)
+
+
+        return jsonify(final)
+            
+    
 
 
 
 api.add_resource(IncomeAPI, '/api/income', '/api/income/<int:id>')
+api.add_resource(GraphAPI, '/api/graph/<string:username>')

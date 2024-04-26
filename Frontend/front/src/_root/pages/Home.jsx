@@ -4,22 +4,76 @@ import CampaignLine from "../../components/CampaignLine";
 import { Link } from "react-router-dom";
 import NewsBar from "../../components/NewsBar";
 import Area from "../../components/charts/Area";
-
+import { LucideCopy, LucideCopyCheck, Wallet2} from "lucide-react";
+import { CustomButton, HomeBox } from "../../components";
 const Home = () => {
-  const { getUserCampaigns, contract, address, isLoading } =useStateContext();
+  const { getUserCampaigns, contract, connect, address, isLoading, walletBalance, isAuth} =useStateContext();
   const [Data, setData] = useState([])
-  console.log(address)
+  const [isCopied, setIsCopied] = useState(false)
+
 const getDetail = async () =>{
   const data= await getUserCampaigns()
   console.log(data)
   setData(data)
 }
+const handleCopy =() =>{
+  navigator.clipboard.writeText(address) 
+            setIsCopied(!isCopied)
+} 
+const monthsArray = [
+  'January', 'February', 'March', 'April', 'May', 'June', 
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+console.log(isCopied)
 useEffect(() => {
   if(contract) getDetail()
 }, [address,contract])
 
   return (
-    <div className={`p-2 flex gap-2 ${ Data.length === 0  && 'justify-between'} rounded-md max-[815px]:flex-col flex-nowrap mt-1 h-full ${isLoading? 'flex-col h-screen':''} overflow-hidden`}>
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-2 flex-shrink justify-evenly mx-3 flex-col md:flex-row"> 
+          <HomeBox title={"Wallet's Balance"} icon1={<Wallet2 size={18} />} msg={`${walletBalance} ETH`} />
+          <HomeBox title={`${monthsArray[new Date().getMonth()]} Month Income`} icon1={<Wallet2 size={18} />} msg={'Rs 125000'} />
+          <HomeBox title={"Wallet's Balance"} icon1={<Wallet2 size={18} />} msg={walletBalance} />
+          <HomeBox title={"Wallet's Balance"} icon1={<Wallet2 size={18} />} msg={walletBalance} />
+        </div>
+        <div className="flex gap-2 mx-2">
+        <div className="p-3 flex flex-col gap-3 rounded-xl md:w-1/2 bg-gradient-to-b from-indigo-900 to-black text-white">
+         <div>
+           Welcome Back,
+          <div className="capitalize ml-16 text-2xl">{localStorage.getItem('username')}</div>
+          </div>
+          <div>Glad to see you here!
+          <div>All Your records have been fetched</div>
+          {(connect && address)?(
+            <div> Here is your wallet address
+          <div className="text-xs flex gap-2 mt-2 items-center"> {address} 
+          <p className="cursor-pointer">
+          {!isCopied ?
+          (<LucideCopy onClick={() =>{ 
+            handleCopy()
+          }} />):(
+          <LucideCopyCheck/>
+          )           }
+          </p>
+          </div>
+          </div>):(
+              <div className="flex flex-col md:w-1/2 gap-2 mt-3"> Click Here to connect to Wallet
+              
+              <p className="w-1/2 ">
+             <CustomButton btnType={"button"} title={"Connect to Wallet"} handleClick={() => connect()} styles={"bg-indigo-500"} />
+                </p> 
+              </div>)
+          
+        }
+          </div>
+        </div>
+        <div className="p-3 rounded-xl md:w-3/4 bg-gradient-to-b from-indigo-900 to-black text-white">
+          Welcome Back,
+          <div></div>
+        </div>
+        </div>
+    <div className={`p-2 flex gap-2 ${ Data?.length === 0  && 'justify-around'} rounded-md max-[850px]:flex-col flex-nowrap mt-1 h-full ${isLoading? 'flex-col h-screen':''}`}>
       
       <div className="p-2">
         {!isLoading && <h1 className="text-center font-bold text-xl lg:text-2xl text-white italic">
@@ -41,10 +95,11 @@ useEffect(() => {
       </div>
       {!isLoading &&
       <div className="flex flex-col items-center w-full xl:w-1/2 gap-2">
-        <NewsBar />
         <Area />
+        <NewsBar />
       </div>}
     </div>
+        </div>
   )
 }
 

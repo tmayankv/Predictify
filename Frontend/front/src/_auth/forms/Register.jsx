@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [dob, setDob] = useState("");
+  const navigate = useNavigate();
 
   const showToken = (msg) =>{
     console.log(msg)
@@ -29,8 +30,9 @@ const Register = () => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Registration successful');
+        showToken( `Registration successful for ${email}` );
         console.log(data.access_token);
+        navigate('/login')
       } else {
         showToken(data.message);
       }
