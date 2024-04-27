@@ -89,4 +89,6 @@ def delete_card(username):
         return {'message': 'card  not found'}, 40
     db.session.delete(card)
     db.session.commit()
+
+    
         

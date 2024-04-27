@@ -16,7 +16,7 @@ from app import app, api, db
 CORS(app, orgins=['https://localhost:5173'], methods=["GET", "POST", "PUT", "DELETE"])
 
 @app.route("/api/exp/<username>", methods=["GET"])
-def get_expense( username):
+def get_expense(username):
     expense = Expense.query.filter_by(username=username).first()
     if not expense:
         return {'message': 'Expense not found'}, 404
@@ -53,6 +53,9 @@ def post_expense():
         name=data['name'],
         category=category_string,
         amount=data['amount'],
+        day = data['day'],
+        month = data['month'],
+        year = data['year']
     )
     db.session.add(expense)
     db.session.commit()
@@ -81,4 +84,21 @@ def delete_expense(username):
     db.session.delete(expense)
     db.session.commit()
     return '', 204  # No content
+    
+class Dates:
+    def __init__(self, day, month, year):
+        self.day = day
+        self.month = month
+        self.year = year
+
+@app.route("/api/expgraph/<string:username>", methods=["GET"])
+def get_expense_graph( username):
+    expenses = Expense.query.filter_by(username=username).all()
+    final = []
+    for expense in expenses:
+        inc_dict = {}
+        inc_dict["x"] = Dates(expense.day, expense.month, expense.year).__dict__
+        inc_dict["y"] = expense.amount
+        final.append(inc_dict)
+    return jsonify(final)
     
