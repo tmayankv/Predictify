@@ -29,13 +29,12 @@ const IncomeComponent = () => {
       console.log(data);
     } catch (error) {
       console.error('Error fetching income data:', error);
-      // Optionally, you can set an error state here and display it in your UI
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const newValue = name === 'recurring' ? value === 'true' : value; // Convert 'true'/'false' strings to actual boolean
+    const newValue = name === 'recurring' ? value === 'true' : value;
     setFormData((prevData) => ({
       ...prevData,
       [name]: newValue,
@@ -44,7 +43,6 @@ const IncomeComponent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Validate form data
     const { username, amount, source, recurring, day, month, year } = formData;
     if (!username || !amount || !source || !recurring || !day || !month || !year) {
       alert('Please fill in all fields');
@@ -76,7 +74,6 @@ const IncomeComponent = () => {
       console.error('Error adding income:', error);
     }
   };
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4 text-white italic text-center">Income Management</h1>
@@ -162,12 +159,10 @@ const IncomeComponent = () => {
         </ul>
       </div>
       <div>
-        {incomeData.length > 0 && (
           <>
             <h1 className='text-2xl font-bold text-white text-center mb-4'>Income Charts So Far</h1>
             <IncomeChart incomeData={incomeData} />
           </>
-        )}
       </div>
     </div>
   );
