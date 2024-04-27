@@ -69,11 +69,12 @@ const IncomeComponent = () => {
     }
   };
   return (
+    <>
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Income Management</h1>
+      <h1 className="text-2xl font-bold mb-4 text-white italic text-center">Income Management</h1>
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-1 gap-4">
+          <div className="flex flex-col gap-2 ">
             <input
   type="number"
   name="amount"
@@ -103,7 +104,7 @@ const IncomeComponent = () => {
   <option value="Yes">Yes</option>
   <option value="No">No</option>
 </select>
-<div className="flex gap-2">
+<div className="flex gap-2 max-[700px]:flex-wrap">
   <input
     type="number"
     name="day"
@@ -141,7 +142,6 @@ const IncomeComponent = () => {
           Add Income
         </button>
       </form>
-      <IncomeChart />
       <div className="mt-4">
         <h2 className="text-xl font-semibold mb-2">Income Data</h2>
         <ul>
@@ -153,6 +153,11 @@ const IncomeComponent = () => {
         </ul>
       </div>
     </div>
+      <div>
+        <h1 className='text-2xl font-bold text-white text-center mb-4'>Income Charts So Far</h1>
+      <IncomeChart />
+      </div>
+          </>
   );
 };
 

@@ -1,55 +1,73 @@
 import React from 'react';
-import { ChartComponent, SeriesCollectionDirective, SeriesDirective, ColumnSeries, Inject, Tooltip, Legend } from '@syncfusion/ej2-react-charts';
+import { ChartComponent, SeriesCollectionDirective, SeriesDirective, ColumnSeries, Inject, Tooltip, Legend, Category, DataLabel } from '@syncfusion/ej2-react-charts';
+import { Browser } from '@syncfusion/ej2-base';
+export let data = [
+  { x: 'China', y: 26, tooltipMappingName: 'China' },
+  { x: 'Australia', y: 8, tooltipMappingName: 'Australia' },
+  { x: 'Germany', y: 17, tooltipMappingName: 'Germany' },
+  { x: 'Spain', y: 7, tooltipMappingName: 'Spain' },
+  { x: 'Japan', y: 12, tooltipMappingName: 'Japan' },
+  { x: 'USA', y: 46, tooltipMappingName: 'United States' }
+];
+
+export const barPrimaryXAxis = {
+  valueType: 'Category',
+  interval: 1,
+  majorGridLines: { width: 0 },
+  labelStyle: { color: 'white' },
+  labelIntersectAction: Browser.isDevice ? 'None' : 'Trim',
+  labelRotation: Browser.isDevice ? -45 : 0,
+
+
+};
+export const barPrimaryYAxis = {
+  title: 'Medal Count',
+  majorGridLines: { width: 0 },
+  majorTickLines: { width: 0 },
+  lineStyle: { width: 0 },
+  labelStyle: { color: '#f0f9ff' },
+  text
+  
+};
+
+export const barCustomSeries = [
+  {
+    dataSource: data,
+    xName: 'x',
+    yName: 'y',
+    type: 'Column',
+    columnFacet: 'Cylinder',
+    width: 2,
+    columnSpacing: 0.1,
+    fill:'#2563eb',
+    marker: {
+      dataLabel: {
+        visible: true,
+        position: 'Top',
+        font: { fontWeight: '400', color: 'white' },
+      },
+    },
+  },
+];
 
 const IncomeChart = () => {
-  const incomeData = [
-    { x: 'January', y: 1500 },
-    { x: 'February', y: 1800 },
-    { x: 'March', y: 2000 },
-    { x: 'April', y: 2200 },
-    { x: 'May', y: 2400 },
-    { x: 'June', y: 2500 },
-    { x: 'July', y: 2800 },
-    { x: 'August', y: 3000 },
-    { x: 'September', y: 3200 },
-    { x: 'October', y: 3400 },
-    { x: 'November', y: 3600 },
-    { x: 'December', y: 3800 },
-  ];
-
   return (
-    <div className="flex items-center justify-center p-2 w-full rounded-lg" style={{ background: 'linear-gradient(to top, rgb(2, 0, 94, 0.5), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
+    <div className="flex items-center justify-center p-2 w-full rounded-lg text-white" style={{ background: 'linear-gradient(to top, rgb(2, 0, 94, 0.2), rgba(0, 0, 0, 0.4))', backdropFilter: 'blur(10px)' }}>
       <ChartComponent
+      className="min-[390px]:w-[85%] max-[1200px]:w-[88%] max-[225px]:w-[65%] "
         id="charts"
-        className="min-[390px]:w-[85%] max-[1200px]:w-[88%] max-[225px]:w-[65%]"
-        height="80%"
-        style={{ textAlign: 'center', color: 'white' }}
-        primaryXAxis={{
-          valueType: 'Category',
-          labelStyle: { color: 'white' } 
-        }}
-        primaryYAxis={{
-          labelFormat: '${value}',
-          lineStyle: { width: 0 },
-          interval: 500,
-          majorTickLines: { width: 0 },
-          minorTickLines: { width: 0 },
-          labelStyle: { color: 'white' } 
-        }}
-        width="75%"
-        legendSettings={{ visible: false }}
+        primaryXAxis={barPrimaryXAxis}
+        primaryYAxis={barPrimaryYAxis}
         chartArea={{ border: { width: 0 } }}
-        title="Income Chart"
         tooltip={{ enable: true }}
+        background={''}
+        legendSettings={{ background: '#2563eb' }}
+        
       >
-        <Inject services={[ColumnSeries, Tooltip, Legend]} />
+        <Inject services={[ColumnSeries, Legend, Tooltip, Category, DataLabel]} />
         <SeriesCollectionDirective>
-          <SeriesDirective
-            dataSource={incomeData}
-            xName="x"
-            yName="y"
-            type="Column"
-          />
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          {barCustomSeries.map((item, index) => <SeriesDirective key={index} {...item} />)}
         </SeriesCollectionDirective>
       </ChartComponent>
     </div>
