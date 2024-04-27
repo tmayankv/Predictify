@@ -13,21 +13,39 @@ from Application.exception import *
 from app import app, api, db
 
 
-class RetirementAPI(Resource):
-    @marshal_with(retirement_fields)
-    def get(self, risk=None):
-        if risk:
-            retirement = Retirement.query.get(risk==risk)
-            if retirement:
-                return retirement.to_dict()
-            else:
-                raise NotFoundError(404, 'Retirement not found')
+@app.route("/api/retirement/<string:risk>", methods=["GET"])
+def get_risk(risk=None):
+    if risk:
+        retirement = Retirement.query.get(risk==risk)
+        if retirement:
+            return retirement.to_dict()
         else:
-            retirements = Retirement.query.all()
-            return [retirement.to_dict() for retirement in retirements]
+            raise NotFoundError(404, 'Retirement not found')
+    else:
+        retirements = Retirement.query.all()
+        return [retirement.to_dict() for retirement in retirements]
+        
+@app.route("/api/retirement", methods=["POST"])
+def post_retirement():
+    data = request.get_json()
+    if not data:
+        raise CustomError('Missing JSON payload')
+
+    # Check if required fields are present in the request
+    required_fields = [ 'name','category', 'risk', 'discription', 'performance', 'expertrating']
+    for field in required_fields:
+        if field not in data:
+            raise CustomError(f'Missing {field} field in the request')
         
 
-
-
-        
-api.add_resource(RetirementAPI,'/api/retirement/<string:risk>','/api/retirement')
+    retirement = Retirement(
+        name=data['name'],
+        category=data['category'],
+        risk=data['risk'],
+        discription=data['discription'],
+        performance=data['performance'],
+        expertrating=data['expertrating']
+    )
+    db.session.add(retirement)
+    db.session.commit()
+    return card.to_dict(), 201
