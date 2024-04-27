@@ -5,7 +5,7 @@ import Register from "./_auth/forms/Register"
 import Login from "./_auth/forms/Login"
  import { useEffect } from "react"
 
-import { Home, RetirementPlanner, Contact, AllCampaigns,IncomeComponent, Profile, CreateCampaign, CampaignDetails, Billing} from "./_root/pages/index"
+import { Home, Contact, AllCampaigns,IncomeComponent, Profile, CreateCampaign, CampaignDetails, Billing, Expense} from "./_root/pages/index"
 
 const App = () => {
   const navigate = useNavigate()
@@ -26,7 +26,7 @@ const App = () => {
             <Route path="/create-campaign" element={< CreateCampaign />} />
             <Route path="/campaign-details/:id" element={< CampaignDetails />} />
             <Route path="/contact" element={< Contact />} />
-            <Route path="/retirement-planner" element={< RetirementPlanner />} />
+            <Route path="/expense" element={< Expense />} />
             <Route path="/income-management" element={< IncomeComponent />} />
             <Route path="/profile" element={< Profile />} />
             <Route path="/billing" element={< Billing />} />

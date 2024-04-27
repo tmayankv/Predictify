@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import IncomeChart from '../../components/charts/IncomeChart';
 
 const IncomeComponent = () => {
   const [incomeData, setIncomeData] = useState([]);
   const [formData, setFormData] = useState({
-    username: '',
+    username: localStorage.getItem('username'),
     amount: '',
     source: '',
     recurring: '',
@@ -18,28 +19,40 @@ const IncomeComponent = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/income'); // Assuming the backend API is hosted at /api/income
+      const response = await fetch('http://127.0.0.1:5000/api/income');
+      if (!response.ok) {
+        throw new Error('Failed to fetch income data');
+      }
       const data = await response.json();
       setIncomeData(data);
+      console.log(data);
     } catch (error) {
       console.error('Error fetching income data:', error);
+      // Optionally, you can set an error state here and display it in your UI
     }
   };
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: (e.target.value).toString() });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validate form data
+    if (!formData.username || !formData.amount || !formData.source || !formData.recurring || !formData.day || !formData.month || !formData.year) {
+      alert('Please fill in all fields');
+      return;
+    }
     try {
-      await fetch('http://127.0.0.1:5000/api/income', {
+      const response = await fetch('http://127.0.0.1:5000/api/income', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      }); // Assuming the backend API is hosted at /api/income
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add income');
+      }
       alert('Income added successfully');
       fetchData(); // Fetch updated data after adding income
       setFormData({
@@ -55,22 +68,13 @@ const IncomeComponent = () => {
       console.error('Error adding income:', error);
     }
   };
-
   return (
+    <>
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Income Management</h1>
+      <h1 className="text-2xl font-bold mb-4 text-white italic text-center">Income Management</h1>
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              className="border p-2 rounded-md"
-              value={formData.username}
-              onChange={handleInputChange}
-              required
-            />
+        <div className="grid grid-cols-1 gap-4">
+          <div className="flex flex-col gap-2 ">
             <input
   type="number"
   name="amount"
@@ -100,7 +104,7 @@ const IncomeComponent = () => {
   <option value="Yes">Yes</option>
   <option value="No">No</option>
 </select>
-<div className="flex gap-2">
+<div className="flex gap-2 max-[700px]:flex-wrap">
   <input
     type="number"
     name="day"
@@ -133,7 +137,7 @@ const IncomeComponent = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg my-2"
         >
           Add Income
         </button>
@@ -149,6 +153,11 @@ const IncomeComponent = () => {
         </ul>
       </div>
     </div>
+      <div>
+        <h1 className='text-2xl font-bold text-white text-center mb-4'>Income Charts So Far</h1>
+      <IncomeChart />
+      </div>
+          </>
   );
 };
 

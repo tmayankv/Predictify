@@ -47,6 +47,7 @@ def post_contactform():
         # Return the complaint number along with the response
     return {'complaint_number': complaint_number}, 201
 
+
 @app.route("/api/contactforms/<username>", methods=["GET"])
 def get_contactform(username):
     contactforms = ContactForm.query.filter_by(username=username).first()
