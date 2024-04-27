@@ -82,7 +82,8 @@ class Income (db.Model):
     
 
 class ContactForm (db.Model):
-    username = db.Column(db.String(100), primary_key=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100),nullable=False)
     message = db.Column(db.String(100), nullable=False)
     image = db.Column(db.String(100), nullable=False)
@@ -91,6 +92,7 @@ class ContactForm (db.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'username': self.username,
             'email': self.email,
             'message': self.message,
@@ -124,13 +126,19 @@ class Expense(db.Model):
     name = db.Column(db.String(80), nullable=False)
     category = db.Column(db.String(80), nullable=False)
     amount = db.Column(db.Float, nullable=False)
+    day = db.Column(db.Integer, nullable=False)
+    month = db.Column(db.Integer, nullable=False)
+    year = db.Column(db.Integer, nullable=False)
     def to_dict(self):
         return {
             'id': self.id,
             'username': self.username,
             'name': self.name,
             'category': self.category,
-            'amount': self.amount
+            'amount': self.amount,
+            'day': self.day,
+            'month': self.month,
+            'year': self.year
         }
 
 class Profile(db.Model):
