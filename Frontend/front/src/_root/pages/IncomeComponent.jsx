@@ -7,7 +7,7 @@ const IncomeComponent = () => {
     username: localStorage.getItem('username'),
     amount: '',
     source: '',
-    recurring: '',
+    recurring: false,
     day: '',
     month: '',
     year: '',
@@ -19,8 +19,9 @@ const IncomeComponent = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/income');
+      const response = await fetch(`/api/income/${localStorage.getItem('username')}`);
       if (!response.ok) {
+        console.log("Fetching");
         throw new Error('Failed to fetch income data');
       }
       const data = await response.json();
@@ -33,7 +34,12 @@ const IncomeComponent = () => {
   };
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const newValue = name === 'recurring' ? value === 'true' : value; // Convert 'true'/'false' strings to actual boolean
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: newValue,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -45,7 +51,7 @@ const IncomeComponent = () => {
       return;
     }
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/income', {
+      const response = await fetch('/api/income', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,12 +62,12 @@ const IncomeComponent = () => {
         throw new Error('Failed to add income');
       }
       alert('Income added successfully');
-      fetchData(); // Fetch updated data after adding income
+      fetchData();
       setFormData({
         username: '',
         amount: '',
         source: '',
-        recurring: '',
+        recurring: false,
         day: '',
         month: '',
         year: '',
@@ -98,13 +104,13 @@ const IncomeComponent = () => {
             <select
               name="recurring"
               className="border p-2 rounded-md"
-              value={formData.recurring}
+              value={formData.recurring.toString()} 
               onChange={handleInputChange}
               required
             >
               <option value="">Select Recurring</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
             </select>
             <div className="flex gap-2 max-[700px]:flex-wrap">
               <input
@@ -147,23 +153,21 @@ const IncomeComponent = () => {
       <div className="mt-4">
         <h2 className="text-xl font-semibold mb-2">Income Data</h2>
         <ul>
-          {incomeData.map((income) => (
-            <li key={income.id}>
-              Username: {income.username}, Amount: {income.amount}, Source: {income.source}
-            </li>
-          ))}
+          {Array.isArray(incomeData) &&
+            incomeData.map((income) => (
+              <li key={income.id}>
+                Username: {income.username}, Amount: {income.amount}, Source: {income.source}
+              </li>
+            ))}
         </ul>
       </div>
       <div>
-        {
-        incomeData.length>0 &&
-        (
+        {incomeData.length > 0 && (
           <>
-          <h1 className='text-2xl font-bold text-white text-center mb-4'>Income Charts So Far</h1>
-          <IncomeChart incomeData={incomeData} />
+            <h1 className='text-2xl font-bold text-white text-center mb-4'>Income Charts So Far</h1>
+            <IncomeChart incomeData={incomeData} />
           </>
-        )
-        }
+        )}
       </div>
     </div>
   );

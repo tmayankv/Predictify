@@ -30,9 +30,10 @@ const Contact = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    console.log(formData)
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/contactforms', {
+      const response = await fetch('/api/contactforms', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,9 +42,8 @@ const Contact = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit form. Server returned ' + response.status);
+        throw new Error('Failed to submit form. Server returned'+ response.status);
       }
-
       const data = await response.json();
       console.log(data);
       setComplaintNumber(data.complaint_number);

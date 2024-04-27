@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 import hashlib
 import uuid
+from flask_cors import CORS
 
 
 from Application.models import *
@@ -15,7 +16,7 @@ from app import app, api, db
 
 
 
-
+CORS(app, orgins=['https://localhost:5173'])
 
 @app.route("/api/contactforms", methods=["POST"])
 def post_contactform():
