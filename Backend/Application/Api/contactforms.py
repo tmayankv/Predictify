@@ -52,10 +52,6 @@ class contactAPI(Resource):
 
         # Return the complaint number along with the response
         return {'complaint_number': complaint_number}, 201
-    
-    # def get(self):
-    #     pass
-
 
         
 

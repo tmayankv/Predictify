@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ChartComponent, SeriesCollectionDirective, SeriesDirective, ColumnSeries, Inject, Tooltip, Legend } from '@syncfusion/ej2-react-charts';
 
 const IncomeChart = () => {
-  const [incomeData, setIncomeData] = useState([]);
-
-  useEffect(() => {
-    fetchIncomeData();
-  }, []);
-
-  const fetchIncomeData = async () => {
-    try {
-      const response = await fetch('http://127.0.0.1:5000/api/graph/yuvi'); // Replace 'username' with the actual username
-      if (!response.ok) {
-        throw new Error('Error fetching income data');
-      }
-      const data = await response.json();
-      setIncomeData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const incomeData = [
+    { x: 'January', y: 1500 },
+    { x: 'February', y: 1800 },
+    { x: 'March', y: 2000 },
+    { x: 'April', y: 2200 },
+    { x: 'May', y: 2400 },
+    { x: 'June', y: 2500 },
+    { x: 'July', y: 2800 },
+    { x: 'August', y: 3000 },
+    { x: 'September', y: 3200 },
+    { x: 'October', y: 3400 },
+    { x: 'November', y: 3600 },
+    { x: 'December', y: 3800 },
+  ];
 
   return (
     <div className="flex items-center justify-center p-2 w-full rounded-lg" style={{ background: 'linear-gradient(to top, rgb(2, 0, 94, 0.5), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>

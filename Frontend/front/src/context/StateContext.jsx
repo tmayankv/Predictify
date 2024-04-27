@@ -24,8 +24,8 @@ export const StateContextProvider = ({ children }) => {
   const connect = useMetamask()
   const navigate= useNavigate()
   const disconnect = useDisconnect()
-  localStorage.setItem('authentication', false)
   useEffect(() => {
+    localStorage.setItem('authentication', true)
     if(!localStorage) localStorage.setItem('authentication', false)
     if (localStorage.getItem('authentication') === false){
         navigate('/login')

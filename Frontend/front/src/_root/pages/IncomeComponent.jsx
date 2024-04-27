@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import IncomeChart from '../../components/charts/IncomeChart';
 
 const IncomeComponent = () => {
   const [incomeData, setIncomeData] = useState([]);
@@ -34,7 +35,6 @@ const IncomeComponent = () => {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: (e.target.value).toString() });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Validate form data
@@ -141,6 +141,7 @@ const IncomeComponent = () => {
           Add Income
         </button>
       </form>
+      <IncomeChart />
       <div className="mt-4">
         <h2 className="text-xl font-semibold mb-2">Income Data</h2>
         <ul>

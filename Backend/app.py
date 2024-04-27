@@ -2,16 +2,14 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager
-# from flask_cors import CORS
+from flask_cors import CORS  # Import CORS
 
 from Application.config import LocalDevelopmentConfig, db
-from Application.models import * # Import your User and Admin models
+from Application.models import *  # Import your User and Admin models
 
 app = None
 api = None
 base_url = 'http://127.0.0.1:5000'
-
-# CORS(app,origins="http://localhost:5173")
 
 def create_app():
     app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -20,7 +18,7 @@ def create_app():
     api = Api(app)
 
     # Initialize CORS
-    # CORS(app,origins="http://localhost:5173")
+    CORS(app, origins="http://localhost:5173")
 
     # Initialize Flask-Login
     login_manager = LoginManager()
