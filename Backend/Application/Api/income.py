@@ -75,7 +75,7 @@ class Date:
 
 
 @app.route("/api/graph/<string:username>", methods=["GET"])
-def get( username):
+def get_graph( username):
     incomes = Income.query.filter_by(username=username).all()
     final = []
     for income in incomes:
