@@ -84,25 +84,26 @@ class ProfileAPI(Resource):
         return '', 204  # No content
     
 
-class ImageUpload(Resource):
-    def post(self):
-        file = request.files['image']
-        image = Image(file.filename, file.read())
-        db.session.add(image)
-        db.session.commit()
+# class ImageUpload(Resource):
+#     def post(self):
+#         file = request.files['image']
+#         image = Image(file.filename, file.read())
+#         db.session.add(image)
+#         db.session.commit()
 
-        return jsonify({'message': 'Image uploaded successfully.'})
+#         return jsonify({'message': 'Image uploaded successfully.'})
     
-    def get(self, image_id):
-        image = Image.query.get(image_id)
-        if not image:
-            return jsonify({'error': 'Image not found'}), 404
+#     def get(self, image_id):
+#         image = Image.query.get(image_id)
+#         if not image:
+#             return jsonify({'error': 'Image not found'}), 404
 
-        # Assuming 'image_data' is the column in your database storing the image data
-        return send_file(io.BytesIO(image.data), mimetype='image/jpeg')
+#         # Assuming 'image_data' is the column in your database storing the image data
+#         return send_file(io.BytesIO(image.data), mimetype='image/jpeg')
 
 
 
-api.add_resource(ImageUpload, '/upload', '/image/<int:image_id>')
+# api.add_resource(ImageUpload, '/upload', '/image/<int:image_id>')
+
 # Add the resource to the API
 api.add_resource(ProfileAPI, '/api/profile/<username>','/api/profile')

@@ -53,24 +53,10 @@ class contactAPI(Resource):
         # Return the complaint number along with the response
         return {'complaint_number': complaint_number}, 201
     
-    def get(self):
-      # Retrieve the access token from the request headers
-      access_token = request.headers.get('Authorization')
-      # Check if access token is provided
-      if not access_token:
-          return jsonify({'error': 'Access token is missing'}), 400
-      # Decode the access token to get the username
-      try:
-          username = decode_token(access_token)['sub']
-      except:
-          return jsonify({'error': 'Invalid access token'}), 400
-      # Query the database to find the complaint ID associated with the username
-      contactform = ContactForm.query.filter_by(username=username).first()
-      # Check if contact form exists
-      if not contactform:
-          return jsonify({'error': 'No contact form found for this user'}), 404
-      # Return the complaint ID
-      return jsonify({'complaint_id': contactform.complaint_id}), 200
+    # def get(self):
+    #     pass
+
+
         
 
 

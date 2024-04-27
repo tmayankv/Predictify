@@ -23,8 +23,8 @@ class IncomeAPI(Resource):
                 return income.to_dict()
             else:
                 raise NotFoundError(404, 'Income not found')
-        elif username:
-            incomes = Income.query.filter_by(username=username).all()
+        elif id:
+            incomes = Income.query.filter_by(id=id).all()
             if incomes:
                 return [income.to_dict() for income in incomes]
             else:
@@ -93,5 +93,5 @@ class GraphAPI(Resource):
 
 
 
-api.add_resource(IncomeAPI, '/api/income', '/api/income/<int:id>')
+api.add_resource(IncomeAPI, '/api/income', '/api/income/<string:username>', '/api/income/<int:id>')
 api.add_resource(GraphAPI, '/api/graph/<string:username>')
