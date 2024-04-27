@@ -34,8 +34,7 @@ useEffect(() => {
         <div className="flex gap-2 flex-shrink justify-evenly mx-3 flex-col md:flex-row"> 
           <HomeBox title={"Wallet's Balance"} icon1={<Wallet2 size={18} />} msg={`${walletBalance} ETH`} />
           <HomeBox title={`${monthsArray[new Date().getMonth()]} Month Income`} icon1={<Wallet2 size={18} />} msg={'Rs 125000'} />
-          <HomeBox title={"Wallet's Balance"} icon1={<Wallet2 size={18} />} msg={walletBalance} />
-          <HomeBox title={"Wallet's Balance"} icon1={<Wallet2 size={18} />} msg={walletBalance} />
+          <HomeBox title={`${monthsArray[new Date().getMonth()]} Month Expenses`} icon1={<Wallet2 size={18} />} msg={''} />
         </div>
         <div className="flex gap-2 mx-2">
         <div className="p-3 flex flex-col gap-3 rounded-xl md:w-1/2 bg-gradient-to-b from-indigo-900 to-black text-white">

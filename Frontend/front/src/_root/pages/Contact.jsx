@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    username: localStorage.getItem('username'),
     email: '',
     message: '',
-    image: null,
+    image: '',
   });
   const [formError, setFormError] = useState('');
 
@@ -19,11 +19,13 @@ const Contact = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    const imageUrl = URL.createObjectURL(file); // Convert file to URL string
     setFormData((prevData) => ({
       ...prevData,
-      image: file,
+      image: imageUrl, // Update image field with URL string
     }));
   };
+  console.log(formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,15 +33,28 @@ const Contact = () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/api/contactforms', {
         method: 'POST',
-        body: new FormData(e.target),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit form');
+        throw new Error('Failed to submit form. Server returned ' + response.status);
       }
 
       const data = await response.json();
       console.log(data);
+      // Assuming your API returns a success message or data, you can handle it here
+      // For example, display a success message to the user
+      alert('Form submitted successfully!');
+      // Reset form data after successful submission
+      setFormData({
+        username: '',
+        email: '',
+        message: '',
+        image: '',
+      });
     } catch (error) {
       console.error('Error submitting form:', error);
       setFormError('Error submitting form. Please try again later.');
@@ -51,15 +66,7 @@ const Contact = () => {
       <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
       {formError && <p className="text-red-500">{formError}</p>}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
-          required
-        />
+      
         <input
           type="email"
           name="email"
