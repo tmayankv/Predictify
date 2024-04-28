@@ -3,7 +3,6 @@ import IncomeChart from '../../components/charts/IncomeChart';
 import { IncomeTable } from '../../components';
 
 const IncomeComponent = () => {
-  const [incomeData, setIncomeData] = useState([]);
   const [valid, setValid] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
@@ -18,26 +17,8 @@ const IncomeComponent = () => {
     year: '',
   });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`/api/income/${localStorage.getItem('username')}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch income data');
-      }
-      const data = await response.json();
-      setValid(!valid);
-      setIncomeData(data);
-      
-    } catch (error) {
-      console.error('Error fetching income data:', error);
-    }
-  };
-
-  console.log(incomeData)
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const newValue = name === 'recurring' ? value === 'true' : value;
@@ -67,8 +48,9 @@ const IncomeComponent = () => {
         throw new Error('Failed to add income');
       }
       setAlertMessage('Income added successfully');
+      setValid(!valid)
       setShowAlert(true);
-      fetchData(); // Update fetched data after successful submission
+      // fetchData(); // Update fetched data after successful submission
       setFormData({
         username: '',
         amount: '',
@@ -174,12 +156,12 @@ const IncomeComponent = () => {
         </button>
       </form>
       <div className="mt-4">
-        <IncomeTable />
+        <IncomeTable valid={valid}  />
       </div>
       <div>
         <>
           <h1 className="text-2xl font-bold text-white text-center mb-4">Income Charts So Far</h1>
-          <IncomeChart incomeData={incomeData} valid={valid} />
+          <IncomeChart valid={valid} />
         </>
       </div>
     </div>

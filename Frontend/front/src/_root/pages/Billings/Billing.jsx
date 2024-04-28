@@ -1,55 +1,70 @@
 import React, { useState, useEffect } from 'react';
+import { CardTransaction, TransactionTable } from '../../../components';
 
 const Billing = () => {
   const [cards, setCards] = useState([]);
+  const [transactionHist, setTransactionHist] = useState([]);
   const [cardType, setCardType] = useState('Mastercard');
   const [cardNumber, setCardNumber] = useState('');
   const [expiryMonth, setExpiryMonth] = useState('');
   const [expiryYear, setExpiryYear] = useState('');
   const [cvv, setCvv] = useState('');
-  const [currentBalance, setCurrentBalance] = useState(0);
-  const [transactionAmount, setTransactionAmount] = useState(0);
+  const [currentBalance, setCurrentBalance] = useState('');
+  const [transactionAmount, setTransactionAmount] = useState('');
   const [transactionType, setTransactionType] = useState('Credit');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
     fetchCardsData();
+    handleTransactionhistory();
   }, []);
 
   const fetchCardsData = async () => {
     try {
       const response = await fetch(`/api/cards/${localStorage.getItem('username')}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch cards data');
+      }
       const data = await response.json();
       setCards(data);
       console.log(data);
     } catch (error) {
       console.error('Error fetching cards:', error);
+      setError('Error fetching cards. Please try again.');
     }
   };
 
   const handleAddCard = async () => {
     setError('');
     try {
+      const formData = {
+        username: localStorage.getItem('username'),
+        cardnumber: cardNumber,
+        cardtype: cardType,
+        cvv: cvv,
+        expirymonth: expiryMonth,
+        expiryyear: expiryYear,
+        balance: currentBalance,
+      };
+
       const response = await fetch('/api/cards', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          username: localStorage.getItem("username"),
-          cardnumber: cardNumber,
-          cardtype: cardType,
-          cvv,
-          expirymonth: expiryMonth,
-          expiryyear: expiryYear,
-          balance: currentBalance,
-        }),
+        body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to add card');
+      }
+
       const data = await response.json();
       setCards([...cards, data]);
       setMessage('Card added successfully');
       clearFormFields();
+      fetchCardsData();
     } catch (error) {
       console.error('Error adding card:', error);
       setError('Error adding card. Please try again.');
@@ -62,55 +77,67 @@ const Billing = () => {
       await fetch(`/api/cards/${id}`, {
         method: 'DELETE',
       });
-      setCards(cards.filter((card) => card.id !== id));
+      
+      const updatedCards = cards.filter((card) => card.id !== id);
+      console.log(updatedCards);
+      setCards(updatedCards);
       setMessage('Card deleted successfully');
     } catch (error) {
       console.error('Error deleting card:', error);
       setError('Error deleting card. Please try again.');
     }
   };
+  
 
-  const handleEditCard = async (id, updatedData) => {
-    setError('');
+  const handleTransactionhistory = async () => {
     try {
-      const response = await fetch(`/api/cards/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData),
+      const response = await fetch(`/api/cards/${localStorage.getItem("username")}/transactions`, {
+        method: 'GET',
       });
+      if (!response.ok) {
+        throw new Error('Failed to fetch transaction history');
+      }
       const data = await response.json();
-      const updatedCards = cards.map((card) => (card.id === id ? data : card));
-      setCards(updatedCards);
-      setMessage('Card updated successfully');
+      setTransactionHist(data);
+      console.log(data);
     } catch (error) {
-      console.error('Error updating card:', error);
-      setError('Error updating card. Please try again.');
+      console.error('Error fetching transaction history:', error);
+      setError('Error fetching transaction history. Please try again.');
     }
   };
 
-  const handleTransaction = async (cardId) => {
+  const handleTransaction = async (cardId, transactionType) => {
+    const transaction= transactionType === 'Debit'? 'debit':'credit'
+    console.log(transaction)
     setError('');
     try {
-      const response = await fetch(`/api/cards/${cardId}`, {
+      const formData = {
+        amount: parseFloat(transactionAmount),
+        type: transactionType,
+        message: message,
+      };
+
+      const response = await fetch(`/api/cards/${cardId}/${transaction}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          amount: parseFloat(transactionAmount),
-          type: transactionType,
-          message,
-        }),
+        body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to complete transaction');
+      }
+
       const data = await response.json();
-      const updatedCards = cards.map((card) =>
+      const updatedCards = cards.card_details.map((card) =>
         card.id === cardId ? { ...card, balance: data.balance } : card
       );
+      handleTransactionhistory();
+      fetchCardsData();
       setCards(updatedCards);
       setMessage('Transaction completed successfully');
-      setTransactionAmount(0);
+      setTransactionAmount('');
       setMessage('');
     } catch (error) {
       console.error('Error completing transaction:', error);
@@ -123,19 +150,14 @@ const Billing = () => {
     setExpiryMonth('');
     setExpiryYear('');
     setCvv('');
-    setCurrentBalance(0);
+    setCurrentBalance('');
   };
-
+console.log(cards.card_details)
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 w-[82vw]">
       <h1 className="text-2xl font-bold mb-4">Billing Management</h1>
 
-      {/* Error Message */}
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-
-      {/* Add Card Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-lg shadow-md p-4 flex flex-col">
+      <div className="bg-white rounded-lg shadow-md p-4 mb-10">
           <h2 className="text-xl font-semibold mb-2">Add New Card</h2>
           <div className="flex flex-col gap-2">
             <label htmlFor="cardType">Card Type:</label>
@@ -194,78 +216,31 @@ const Billing = () => {
             </button>
           </div>
         </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+       
 
-        {/* Transaction History Section */}
-        {cards.length > 0 && (
-          <div className="bg-white rounded-lg shadow-md p-4 flex flex-col">
-            <h2 className="text-xl font-semibold mb-2">Transaction History</h2>
-            <div className="overflow-y-auto max-h-60">
-              <ul className="divide-y divide-gray-300">
-                {cards.map((card) => (
-                  <li key={card.id} className="py-2">
-                    <div className="flex justify-between">
-                      <div>{card.type === 'Credit' ? 'Credited' : 'Debited'}:</div>
-                      <div>{card.amount} USD</div>
-                    </div>
-                    <div className="text-sm text-gray-500">{card.cardNumber}</div>
-                    <div className="text-sm text-gray-500">{card.message}</div>
-                    <div className="text-sm text-gray-500">{card.date}</div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
+        {cards?.card_details &&
+          cards.card_details.map((card) => (
+            <CardTransaction
+              key={card.id}
+              card={card}
+              transactionAmount={transactionAmount}
+              setTransactionAmount={setTransactionAmount}
+              transactionType={transactionType}
+              setTransactionType={setTransactionType}
+              message={message}
+              setMessage={setMessage}
+              handleTransaction={handleTransaction}
+              handleDeleteCard={handleDeleteCard}
+            />
+          ))}
       </div>
+      <div>
 
-      {/* Display Cards */}
-      {cards.map((card) => (
-        <div key={card.id} className="bg-white rounded-lg shadow-md p-4 flex flex-col mt-4">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold">{card.type} Card</h2>
-            <div className="text-gray-600">{card.cardNumber}</div>
-            <div className="text-gray-600">Balance: {card.balance} USD</div>
-          </div>
-          <div className="flex gap-2">
-            <input
-              type="number"
-              placeholder="Enter transaction amount"
-              className="border p-2 rounded-md flex-1"
-              value={transactionAmount}
-              onChange={(e) => setTransactionAmount(parseFloat(e.target.value))}
-            />
-            <select
-              className="border p-2 rounded-md"
-              value={transactionType}
-              onChange={(e) => setTransactionType(e.target.value)}
-            >
-              <option value="Credit">Credit</option>
-              <option value="Debit">Debit</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Enter message for transaction"
-              className="border p-2 rounded-md flex-1"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <button
-              onClick={() => handleTransaction(card.id)}
-              className={`bg-${transactionType === 'Credit' ? 'green' : 'red'}-500 hover:bg-${
-                transactionType === 'Credit' ? 'green' : 'red'
-              }-600 text-white px-3 py-1 w-1/2 rounded-lg flex`}
-            >
-              {transactionType === 'Credit' ? 'Credit' : 'Debit'}
-            </button>
-          </div>
-          <button
-            onClick={() => handleDeleteCard(card.id)}
-            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 mt-4 rounded-lg"
-          >
-            Delete Card
-          </button>
+      {(transactionHist && transactionHist.transaction_history) && (
+       <TransactionTable transactionHist= {transactionHist}/>
+        )}
         </div>
-      ))}
     </div>
   );
 };

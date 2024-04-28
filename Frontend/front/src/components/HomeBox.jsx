@@ -12,14 +12,7 @@ const HomeBox = ({ title, icon1, msg }) => {
         </div>
         <div className="flex items-center gap-1 text-lg">
           <icon1 size={18} />
-          {String(msg).length > 4 && (
-
-            <p>
-            {String(msg).slice(0, 9)}
-            {msg.length > 10 ? String(msg).slice(-3,) : ""}
-          </p>
-        )
-          }
+         <p>{msg}</p>
         </div>
       </div>
     </div>

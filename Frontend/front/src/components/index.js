@@ -10,5 +10,10 @@ export {default as NewsBar} from './NewsBar';
 export {default as CampaignBanner} from './CampaignBanner';
 export {default as HomeBox } from './HomeBox';
 export {default as IncomeTable} from './IncomeTable';
+export {default as ExpenseTable} from './ExpenseTable';
+export {default as CardTransaction} from './CardTransaction';
+export {default as TransactionTable} from './TransactionTable';
+
+
 
 
