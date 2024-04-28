@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import IncomeChart from '../../components/charts/IncomeChart';
 import { IncomeTable } from '../../components';
 
-
 const IncomeComponent = () => {
   const [incomeData, setIncomeData] = useState([]);
-  const [valid, setValid] = useState(false)
-  const [alert, setAlert] = useState(false)
+  const [valid, setValid] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
 
   const [formData, setFormData] = useState({
     username: localStorage.getItem('username'),
@@ -31,11 +31,13 @@ const IncomeComponent = () => {
       const data = await response.json();
       setValid(!valid);
       setIncomeData(data);
+      
     } catch (error) {
       console.error('Error fetching income data:', error);
     }
   };
-  
+
+  console.log(incomeData)
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const newValue = name === 'recurring' ? value === 'true' : value;
@@ -46,9 +48,11 @@ const IncomeComponent = () => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
     const { username, amount, source, recurring, day, month, year } = formData;
     if (!username || !amount || !source || !recurring || !day || !month || !year) {
-      alert('Please fill in all fields');
+      setAlertMessage('Please fill in all fields');
+      setShowAlert(true);
       return;
     }
     try {
@@ -62,9 +66,9 @@ const IncomeComponent = () => {
       if (!response.ok) {
         throw new Error('Failed to add income');
       }
-      setAlert(true)
-      alert('Income added successfully');
-      fetchData();
+      setAlertMessage('Income added successfully');
+      setShowAlert(true);
+      fetchData(); // Update fetched data after successful submission
       setFormData({
         username: '',
         amount: '',
@@ -78,15 +82,22 @@ const IncomeComponent = () => {
       console.error('Error adding income:', error);
     }
   };
+
   return (
     <div className="container mx-auto p-4">
-       {alert && (
+      {showAlert && (
         <div className="bg-indigo-900 text-center py-4 lg:px-4">
           <div className="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
-            <span className="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">{localStorage.getItem("username")},</span>
-            <span className="font-semibold mr-2 text-left flex-auto">Your complaint has been successfully registered with Ref. Number</span>
-            <svg className="fill-current opacity-75 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z"/>
+            <span className="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">
+              {localStorage.getItem('username')},
+            </span>
+            <span className="font-semibold mr-2 text-left flex-auto">{alertMessage}</span>
+            <svg
+              className="fill-current opacity-75 h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z" />
             </svg>
           </div>
         </div>
@@ -166,10 +177,10 @@ const IncomeComponent = () => {
         <IncomeTable />
       </div>
       <div>
-          <>
-            <h1 className='text-2xl font-bold text-white text-center mb-4'>Income Charts So Far</h1>
-            <IncomeChart incomeData={incomeData} valid={valid} />
-          </>
+        <>
+          <h1 className="text-2xl font-bold text-white text-center mb-4">Income Charts So Far</h1>
+          <IncomeChart incomeData={incomeData} valid={valid} />
+        </>
       </div>
     </div>
   );
