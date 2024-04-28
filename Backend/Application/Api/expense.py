@@ -15,6 +15,7 @@ from app import app, api, db
 
 
 CORS(app, orgins=['https://localhost:5173'], methods=["GET", "POST", "PUT", "DELETE"])
+
 @app.route("/api/exp/<username>", methods=["GET"])
 def get_expense(username):
     expense = Expense.query.filter_by(username=username).first()
@@ -92,7 +93,7 @@ class Dates:
         self.year = year
 
 @app.route("/api/expgraph/<string:username>", methods=["GET"])
-def get_expense_graph( username):
+def get_expense_graph(username):
     expenses = Expense.query.filter_by(username=username).all()
     final = []
     for expense in expenses:

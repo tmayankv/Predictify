@@ -51,7 +51,7 @@ def post_contactform():
 def get_contactform(username):
     contactforms = ContactForm.query.filter_by(username=username).all()
     if not contactforms:
-        return {'message': 'Expense not found'}, 404
+        return {'message': 'Contactform not found'}, 404
     contactforms_data = [contactform.to_dict() for contactform in contactforms]
     return {'contactforms': contactforms_data}, 200
         
