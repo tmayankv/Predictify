@@ -20,11 +20,12 @@ CORS(app,orgins=['https://localhost:5173'])
 @app.route("/api/income/<int:id>", methods=["GET"])
 def get_income(id=None, username=None):
     if username:
-        income = Income.query.filter_by(username=username).first()
-        if income:
-            return income.to_dict()
+        incomes = Income.query.filter_by(username=username).all()
+        if incomes:
+            income_data = [income.to_dict() for income in incomes]
+            return {'user income': income_data}, 200
         else:
-            raise NotFoundError(404, 'Income not found')
+            raise NotFoundError(404, 'Incomes not found for this username')
     elif id:
         incomes = Income.query.filter_by(id=id).all()
         if incomes:
