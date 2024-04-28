@@ -11,6 +11,7 @@ const CardTransaction = ({
   handleTransaction,
   handleDeleteCard,
 }) => {
+ 
   return (
     <div key={card.id} className=" rounded-lg shadow-md p-4 flex flex-col mt-4" style={{background:"url('https://imgs.search.brave.com/jQqfZkS1W_kw9DpnUv-X7PtGVbJObtMEUPfZA2hAKLo/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA3LzI2LzA1LzY2/LzM2MF9GXzcyNjA1/NjY2MV9jMWpXT3Zq/ckQwaktIRHVlQWEw/TkpHVVJxRXpTSDFy/Yi5qcGc')"}}>
       <div className="mb-4  text-white">

@@ -57,15 +57,16 @@ export const employeesGrid = [
       width: '120',
       textAlign: 'Center' },
   ];
-const TransactionTable = ({transactionHist}) => {
-    const [Balance, setBalance] = useState(transactionHist.balance)
-    const [cardN, setcardN] = useState(transactionHist.card_number)
+const TransactionTable = ({transaction, title}) => {
+  console.log(transaction);
+    const [Balance, setBalance] = useState(transaction.balance)
+    const [cardN, setcardN] = useState(transaction.card_number)
     
     const [TableData, setTableData] = useState([])
     
     useEffect(()=>{
-            if (transactionHist && transactionHist.transaction_history) {
-              const formattedData = transactionHist.transaction_history.map((ele, i) => ({
+            if (transaction && transaction.transaction_history) {
+              const formattedData = transaction.transaction_history.map((ele, i) => ({
                 ...ele,
                 ID: i + 1,
                 Date: new Date(ele.timestamp).toDateString(),
@@ -75,11 +76,11 @@ const TransactionTable = ({transactionHist}) => {
                 Balance: Balance,
               }));
               setTableData(formattedData);
-              console.log(formattedData);
             }
-          }, [transactionHist]);
+          }, [transaction]);
   return (
-    <div className="m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl">
+    <div className="m-2 text-white md:m-10 p-2 md:p-10 bg-white rounded-3xl" style={{ background: 'linear-gradient(to top, rgb(0,55,222,0.3), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
+      <h1 className="text-center text-2xl max-[400px]:text-lg mb-6 font-bold ">Transaction History of Your Card '{title}'</h1>
       <GridComponent
         id="gridComp"
         dataSource={TableData}

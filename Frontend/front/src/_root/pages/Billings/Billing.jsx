@@ -18,7 +18,7 @@ const Billing = () => {
   useEffect(() => {
     fetchCardsData();
     handleTransactionhistory();
-  }, []);
+  }, [transactionHist,cards]);
 
   const fetchCardsData = async () => {
     try {
@@ -28,7 +28,6 @@ const Billing = () => {
       }
       const data = await response.json();
       setCards(data);
-      console.log(data);
     } catch (error) {
       console.error('Error fetching cards:', error);
       setError('Error fetching cards. Please try again.');
@@ -78,9 +77,10 @@ const Billing = () => {
         method: 'DELETE',
       });
       
-      const updatedCards = cards.card_details.filter((card) => card.id !== id);
-      console.log(updatedCards);
+      const updatedCards = cards.filter((card) => card.id !== id);
       setCards(updatedCards);
+      fetchCardsData();
+      handleTransactionhistory()
       setMessage('Card deleted successfully');
     } catch (error) {
       console.error('Error deleting card:', error);
@@ -99,7 +99,7 @@ const Billing = () => {
       }
       const data = await response.json();
       setTransactionHist(data);
-      console.log(data);
+      fetchCardsData()
     } catch (error) {
       console.error('Error fetching transaction history:', error);
       setError('Error fetching transaction history. Please try again.');
@@ -108,7 +108,6 @@ const Billing = () => {
 
   const handleTransaction = async (cardId, transactionType) => {
     const transaction= transactionType === 'Debit'? 'debit':'credit'
-    console.log(transaction)
     setError('');
     try {
       const formData = {
@@ -130,7 +129,7 @@ const Billing = () => {
       }
 
       const data = await response.json();
-      const updatedCards = cards.card_details.map((card) =>
+      const updatedCards = cards.map((card) =>
         card.id === cardId ? { ...card, balance: data.balance } : card
       );
       handleTransactionhistory();
@@ -152,9 +151,9 @@ const Billing = () => {
     setCvv('');
     setCurrentBalance('');
   };
-console.log(cards.card_details)
+
   return (
-    <div className="container mx-auto p-4 w-[82vw]">
+    <div className="container mx-auto p-4 min-[500px]:w-[82vw] w-[75vw]">
       <h1 className="text-3xl text-white itlaic font-bold mb-4 text-center">Billing Management</h1>
 
       <div className="rounded-lg shadow-md p-4 mb-10 text-white"  style={{ background: 'linear-gradient(to top, rgba(2, 0, 94, 0.5), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
@@ -207,7 +206,6 @@ console.log(cards.card_details)
               value={currentBalance}
               onChange={(e) => setCurrentBalance(parseFloat(e.target.value))}
             />
-            {message && <div className="text-green-500 mb-2">{message}</div>}
             <button
               onClick={handleAddCard}
               className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg"
@@ -219,8 +217,7 @@ console.log(cards.card_details)
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
        
 
-        {cards?.card_details &&
-          cards.card_details.map((card) => (
+        { cards?.map((card) => (
             <CardTransaction
               key={card.id}
               card={card}
@@ -237,9 +234,9 @@ console.log(cards.card_details)
       </div>
       <div>
 
-      {(transactionHist && transactionHist.transaction_history) && (
-       <TransactionTable transactionHist= {transactionHist}/>
-        )}
+      {transactionHist && transactionHist.map(ele =>{
+        return <TransactionTable key={ele.id} title={ele.card_number} transaction={ele} />
+      }) }
         </div>
     </div>
   );

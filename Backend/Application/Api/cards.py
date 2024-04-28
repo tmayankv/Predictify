@@ -21,21 +21,23 @@ CORS(app, orgins=['https://localhost:5173'])
 def get_card(id=None, username=None):
     if username:
         cards = Card.query.filter_by(username=username).all()
-        if cards: 
-             card_details =[card.to_dict() for card in cards]
-             return {'card_details': card_details}
+        if cards:
+            card_dicts = [card.to_dict() for card in cards]
+            return card_dicts, 200
         else:
-            raise NotFoundError(404, 'Income not found')
-    if id is not None: 
+            return {'message': 'No cards found for this username'}, 404
+
+    if id is not None:
         card = Card.query.filter_by(id=id).first()
         if card:
-            return card.to_dict()
+            return card.to_dict(), 200
         else:
-            raise NotFoundError(404, 'Income not found')
+            return {'message': 'Card not found'}, 404
+
     else:
         cards = Card.query.all()
-        card_details =[card.to_dict() for card in cards]
-        return {'card_details': card_details}
+        card_dicts = [card.to_dict() for card in cards]
+        return card_dicts, 200
 
 @app.route("/api/cards", methods=["POST"])
 def post_card():
@@ -53,6 +55,11 @@ def post_card():
         raise MissingParameterError(400, "Card number must be Exactly 16 Digits")
     if len(str(data['cvv'])) != 3:
         raise MissingParameterError(400, "CVV must be Exactly 3 Digits")
+    
+    existing_card = Card.query.filter_by(cardnumber=data['cardnumber']).first()
+    if existing_card:
+        return {'message': 'Card number already exists'}, 400
+    
     card = Card(
         username=data['username'],
         cardnumber=data['cardnumber'],
@@ -144,30 +151,22 @@ def debit_card_balance(id):
     db.session.commit()
     return card.to_dict(), 200
 
+
 @app.route("/api/cards/<username>/transactions", methods=["GET"])
-def get_card_transactions_by_username(username):
-    card = Card.query.filter_by(username=username).first()
-    if not card:
-        raise NotFoundError(404, 'Card not found')
+def get_transactions_by_username(username):
+    cards = Card.query.filter_by(username=username).all()
+    if not cards:
+        return {'message': 'No cards found for this username'}, 404
 
-    transactions = Transaction.query.filter_by(card_id=card.id).order_by(Transaction.timestamp.desc()).all()
-    if not transactions:
-        return {'message': 'No transactions found for this card'}, 404
-
-    transaction_history = []
-    for transaction in transactions:
-        transaction_info = {
-            'timestamp': transaction.timestamp,
-            'amount': transaction.amount,
-            'transaction_type': transaction.transaction_type
+    all_data = []
+    for card in cards:
+        transactions = Transaction.query.filter_by(card_id=card.id).all()
+        transaction_data = [{'amount': transaction.amount, 'timestamp': transaction.timestamp, 'transaction_type': transaction.transaction_type} for transaction in transactions]
+        card_data = {
+            'balance': card.balance,
+            'card_number': card.cardnumber,
+            'transaction_history': transaction_data
         }
-        transaction_history.append(transaction_info)
+        all_data.append(card_data)
 
-    card_info = {
-        'card_number': card.cardnumber,
-        'balance': card.balance,
-        'transaction_history': transaction_history
-    }
-
-    return jsonify(card_info), 200
-
+    return all_data, 200
