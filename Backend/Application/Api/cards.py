@@ -28,9 +28,9 @@ def get_card(id=None, username=None):
     if id is not None:  # Change this condition to check if id is not None
         card = Card.query.filter_by(id=id).first()
         if card:
-            return jsonify(card.to_dict()), 200
+            return card.to_dict(), 200
         else:
-            return jsonify({'message': 'Card not found'}), 404
+            return{'message': 'Card not found'}, 404
 
     else:
         cards = Card.query.all()
@@ -55,7 +55,7 @@ def post_card():
     
     existing_card = Card.query.filter_by(cardnumber=data['cardnumber']).first()
     if existing_card:
-        return jsonify({'message': 'Card number already exists'}), 400
+        return {'message': 'Card number already exists'}, 400
     
     card = Card(
         username=data['username'],
@@ -153,7 +153,7 @@ def debit_card_balance(id):
 def get_transactions_by_username(username):
     cards = Card.query.filter_by(username=username).all()
     if not cards:
-        return jsonify({'message': 'No cards found for this username'}), 404
+        return {'message': 'No cards found for this username'}, 404
 
     all_data = []
     for card in cards:
@@ -166,5 +166,5 @@ def get_transactions_by_username(username):
         }
         all_data.append(card_data)
 
-    return jsonify(all_data), 200
+    return all_data, 200
 
