@@ -18,16 +18,16 @@ const CardTransaction = ({
         <div className="text-gray-400">Card:- {card.cardnumber}</div>
         <div className="text-gray-600 flex">Balance:<IndianRupee /> {card.balance}</div>
       </div>
-      <div className="flex gap-2 flex-col">
+      <div className="flex gap-2 flex-col text-white">
         <input
           type="number"
           placeholder="Enter transaction amount"
-          className="border p-2 rounded-md flex-1"
+          className="border p-2 rounded-md flex-1 bg-gray-800"
           value={transactionAmount}
           onChange={(e) => setTransactionAmount(parseFloat(e.target.value))}
         />
         <select
-          className="border p-2 rounded-md"
+          className="border p-2 rounded-md bg-gray-800"
           value={transactionType}
           onChange={(e) => setTransactionType(e.target.value)}
         >
@@ -37,7 +37,7 @@ const CardTransaction = ({
         <input
           type="text"
           placeholder="Enter message for transaction"
-          className="border p-2 rounded-md flex-1"
+          className="border p-2 rounded-md flex-1 bg-gray-800"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />

@@ -78,7 +78,7 @@ const Billing = () => {
         method: 'DELETE',
       });
       
-      const updatedCards = cards.filter((card) => card.id !== id);
+      const updatedCards = cards.card_details.filter((card) => card.id !== id);
       console.log(updatedCards);
       setCards(updatedCards);
       setMessage('Card deleted successfully');
@@ -155,10 +155,10 @@ const Billing = () => {
 console.log(cards.card_details)
   return (
     <div className="container mx-auto p-4 w-[82vw]">
-      <h1 className="text-2xl font-bold mb-4">Billing Management</h1>
+      <h1 className="text-3xl text-white itlaic font-bold mb-4 text-center">Billing Management</h1>
 
-      <div className="bg-white rounded-lg shadow-md p-4 mb-10">
-          <h2 className="text-xl font-semibold mb-2">Add New Card</h2>
+      <div className="rounded-lg shadow-md p-4 mb-10 text-white"  style={{ background: 'linear-gradient(to top, rgba(2, 0, 94, 0.5), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
+          <h2 className="text-xl font-semibold mb-2 ">Add New Card</h2>
           <div className="flex flex-col gap-2">
             <label htmlFor="cardType">Card Type:</label>
             <select

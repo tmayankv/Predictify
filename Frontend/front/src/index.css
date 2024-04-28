@@ -44,3 +44,12 @@
 .bor-side{
     border: 1px solid rgba(137, 20, 226, 0.819);
 }
+
+input:placeholder-shown,input, select, textarea {
+    background-color: rgba(67, 67, 67, 0.456);
+    color: white;
+    border: none;
+}
+input:focus{
+    border: 1px solid white;
+}

@@ -7,6 +7,7 @@ from flask_jwt_extended import create_access_token
 import hashlib
 from flask import send_file
 import io
+from flask_cors import CORS
 
 
 
@@ -15,6 +16,8 @@ from Application.marshal import *
 from Application.exception import *
 from app import app, api, db
 
+
+CORS(app, origins=['https://localhost:5173'])
 @app.route("/api/profile/<username>", methods=["GET"])
 def get_profile(username):
     profile = Profile.query.filter_by(username=username).first()
