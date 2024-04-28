@@ -20,13 +20,12 @@ CORS(app, orgins=['https://localhost:5173'])
 @app.route("/api/cards/<int:id>", methods=["GET"])
 def get_card(id=None, username=None):
     if username:
-        cards = Card.query.filter_by(username=username).all()
-        if cards: 
-             card_details =[card.to_dict() for card in cards]
-             return {'card_details': card_details}
+        card = Card.query.filter_by(username=username).first()
+        if card:
+            return card.to_dict()
         else:
             raise NotFoundError(404, 'Income not found')
-    if id is not None: 
+    if id is not None:  # Change this condition to check if id is not None
         card = Card.query.filter_by(id=id).first()
         if card:
             return card.to_dict()
@@ -34,8 +33,7 @@ def get_card(id=None, username=None):
             raise NotFoundError(404, 'Income not found')
     else:
         cards = Card.query.all()
-        card_details =[card.to_dict() for card in cards]
-        return {'card_details': card_details}
+        return [card.to_dict() for card in cards]
 
 @app.route("/api/cards", methods=["POST"])
 def post_card():
@@ -66,7 +64,7 @@ def post_card():
     db.session.commit()
     return card.to_dict(), 201  # 201 status code for resource created
 
-@app.route("/api/cards/<username>", methods=["PUT"])
+@app.route("/api/cards/<int:id>", methods=["PUT"])
 def put_card(id):
     data = request.get_json()
     if not data:
@@ -93,7 +91,7 @@ def delete_card(id):
     db.session.commit()
     return {'message': 'Card deleted'}, 200
 
-@app.route("/api/cards/<int:id>/credit", methods=["POST"])
+@app.route("/api/cards/<int:id>/credit", methods=["PUT"])
 def credit_card_balance(id):
     data = request.get_json()
     if not data or 'amount' not in data:
@@ -117,7 +115,7 @@ def credit_card_balance(id):
     db.session.commit()
     return card.to_dict(), 200
 
-@app.route("/api/cards/<int:id>/debit", methods=["POST"])
+@app.route("/api/cards/<int:id>/debit", methods=["PUT"])
 def debit_card_balance(id):
     data = request.get_json()
     if not data or 'amount' not in data:
