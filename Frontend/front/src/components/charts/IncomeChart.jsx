@@ -5,6 +5,21 @@ import { Browser } from '@syncfusion/ej2-base';
 const IncomeChart = ({valid}) => {
   const [graphData, setGraphData] = useState([]);
 
+  const randomGraphData = [
+    { x: new Date(2022, 0, 1), y: 100 },
+    { x: new Date(2022, 1, 1), y: 150 },
+    { x: new Date(2022, 2, 1), y: 200 },
+    { x: new Date(2022, 3, 1), y: 180 },
+    { x: new Date(2022, 4, 1), y: 220 },
+    { x: new Date(2022, 5, 1), y: 250 },
+    { x: new Date(2022, 6, 1), y: 300 },
+    { x: new Date(2022, 7, 1), y: 280 },
+    { x: new Date(2022, 8, 1), y: 320 },
+    { x: new Date(2022, 9, 1), y: 350 },
+    { x: new Date(2022, 10, 1), y: 400 },
+    { x: new Date(2022, 11, 1), y: 380 },
+  ];
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -28,7 +43,7 @@ const IncomeChart = ({valid}) => {
       console.error('Error fetching graph data:', error);
     }
   };
-
+console.log(graphData);
   const onChartLoad = (args) => {
     let chart = document.getElementById('charts');
     chart.setAttribute('title', '');
@@ -108,7 +123,7 @@ const IncomeChart = ({valid}) => {
         <Inject services={[SplineAreaSeries, DateTime, Tooltip, Legend, Highlight]} />
         <SeriesCollectionDirective>
           <SeriesDirective
-            dataSource={graphData}
+            dataSource={randomGraphData}
             xName="x"
             yName="y"
             name="Expense"
@@ -116,8 +131,8 @@ const IncomeChart = ({valid}) => {
             opacity={0.3}
             type="SplineArea"
             width={2}
-            fill="#16a34a"
-            border={{ width: 4, color: '#16a34a' }} // Set glow effect color here
+            fill="#1d4ed8"
+            border={{ width: 4, color: '#1d4ed8' }} // Set glow effect color here
           />
         </SeriesCollectionDirective>
       </ChartComponent>
