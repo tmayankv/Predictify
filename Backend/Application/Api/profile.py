@@ -54,7 +54,7 @@ def post_profile():
     return profile.to_dict(), 201  # 201 status code for resource created
 
 @app.route("/api/register/<username>", methods=["PUT"])
-def put_profile(self, username):
+def put_profile(username):
     data = request.get_json()
     if not data:
         raise CustomError('Missing JSON payload')

@@ -65,12 +65,12 @@ def post_card():
     return card.to_dict(), 201  # 201 status code for resource created
 
 @app.route("/api/cards/<username>", methods=["PUT"])
-def put_card(username):
+def put_card(id):
     data = request.get_json()
     if not data:
         raise CustomError('Missing JSON payload')
 
-    card = Card.query.filter_by(username=username).first()
+    card = Card.query.get(id)
     if not card:
         return {'message': 'Profile not found'}, 404
 
@@ -90,3 +90,82 @@ def delete_card(id):
     db.session.delete(card)
     db.session.commit()
     return {'message': 'Card deleted'}, 200
+
+@app.route("/api/cards/<int:id>/credit", methods=["PUT"])
+def credit_card_balance(id):
+    data = request.get_json()
+    if not data or 'amount' not in data:
+        raise CustomError('Missing or invalid JSON payload')
+
+    amount = data['amount']
+    if not isinstance(amount, int) or amount <= 0:
+        raise CustomError('Invalid amount for credit operation')
+
+    card = Card.query.get(id)
+    if not card:
+        raise NotFoundError(404, 'Card not found')
+
+    card.balance += amount
+    transaction = Transaction(
+        card_id=id,
+        amount=amount,
+        transaction_type='credit'
+    )
+    db.session.add(transaction)
+    db.session.commit()
+    return card.to_dict(), 200
+
+@app.route("/api/cards/<int:id>/debit", methods=["PUT"])
+def debit_card_balance(id):
+    data = request.get_json()
+    if not data or 'amount' not in data:
+        raise CustomError('Missing or invalid JSON payload')
+
+    amount = data['amount']
+    if not isinstance(amount, int) or amount <= 0:
+        raise CustomError('Invalid amount for debit operation')
+
+    card = Card.query.get(id)
+    if not card:
+        raise NotFoundError(404, 'Card not found')
+
+    if card.balance < amount:
+        raise CustomError('Insufficient balance')
+
+    card.balance -= amount
+    transaction = Transaction(
+        card_id=id,
+        amount=amount,
+        transaction_type='debit'
+    )
+    db.session.add(transaction)
+    db.session.commit()
+    return card.to_dict(), 200
+
+@app.route("/api/cards/<username>/transactions", methods=["GET"])
+def get_card_transactions_by_username(username):
+    card = Card.query.filter_by(username=username).first()
+    if not card:
+        raise NotFoundError(404, 'Card not found')
+
+    transactions = Transaction.query.filter_by(card_id=card.id).order_by(Transaction.timestamp.desc()).all()
+    if not transactions:
+        return {'message': 'No transactions found for this card'}, 404
+
+    transaction_history = []
+    for transaction in transactions:
+        transaction_info = {
+            'timestamp': transaction.timestamp,
+            'amount': transaction.amount,
+            'transaction_type': transaction.transaction_type
+        }
+        transaction_history.append(transaction_info)
+
+    card_info = {
+        'card_number': card.cardnumber,
+        'balance': card.balance,
+        'transaction_history': transaction_history
+    }
+
+    return jsonify(card_info), 200
+
