@@ -33,9 +33,7 @@ def post_contactform():
         raise MissingParameterError(400, "message is required")
     if not image:
         raise MissingParameterError(400, "image is required")
-    # Generate a unique complaint number
     complaint_number = str(uuid.uuid4())
-    # Create a new instance of ContactForm
     contactform = ContactForm()
     contactform.complaint_number = complaint_number
     contactform.username = username

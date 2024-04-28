@@ -14,8 +14,8 @@ from Application.exception import *
 from app import app, api, db
 
 
-CORS(app,orgins=['https://localhost:5173'])
 
+CORS(app,orgins=['https://localhost:5173'])
 @app.route("/api/income/<string:username>", methods=["GET"])
 @app.route("/api/income/<int:id>", methods=["GET"])
 def get_income(id=None, username=None):

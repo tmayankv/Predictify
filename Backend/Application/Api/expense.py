@@ -5,6 +5,7 @@ from flask_restful import marshal_with
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 import hashlib
+from flask_cors import CORS
 
 
 from Application.models import *
@@ -13,6 +14,7 @@ from Application.exception import *
 from app import app, api, db
 
 
+CORS(app, orgins=['https://localhost:5173'], methods=["GET", "POST", "PUT", "DELETE"])
 @app.route("/api/exp/<username>", methods=["GET"])
 def get_expense(username):
     expense = Expense.query.filter_by(username=username).first()
