@@ -53,7 +53,7 @@ def post_profile():
     db.session.commit()
     return profile.to_dict(), 201  # 201 status code for resource created
 
-@app.route("/api/register/<username>", methods=["PUT"])
+@app.route("/api/profile/<username>", methods=["PUT"])
 def put_profile(username):
     data = request.get_json()
     if not data:
@@ -68,7 +68,7 @@ def put_profile(username):
     db.session.commit()
     return profile.to_dict(), 200
 
-@app.route("/api/register/<username>", methods=["DELETE"])
+@app.route("/api/profile/<username>", methods=["DELETE"])
 def delete_profile(username):
     profile = Profile.query.filter_by(username=username).first()
     if not profile:
