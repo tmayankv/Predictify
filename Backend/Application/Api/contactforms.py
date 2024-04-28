@@ -51,9 +51,10 @@ def post_contactform():
 
 @app.route("/api/contactforms/<username>", methods=["GET"])
 def get_contactform(username):
-    contactforms = ContactForm.query.filter_by(username=username).first()
+    contactforms = ContactForm.query.filter_by(username=username).all()
     if not contactforms:
         return {'message': 'Expense not found'}, 404
-    return contactforms.to_dict(), 200
+    contactforms_data = [contactform.to_dict() for contactform in contactforms]
+    return {'contactforms': contactforms_data}, 200
         
 
