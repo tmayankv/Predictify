@@ -7,13 +7,14 @@ from flask_jwt_extended import create_access_token
 import hashlib
 from flask import send_file
 import io
-
-
+from flask_cors import CORS
 
 from Application.models import *
 from Application.marshal import *
 from Application.exception import *
 from app import app, api, db
+
+CORS(app, orgins=['https://localhost:5173'])
 
 @app.route("/api/cards/<username>", methods=["GET"])
 @app.route("/api/cards/<int:id>", methods=["GET"])
@@ -33,7 +34,7 @@ def get_card(id=None, username=None):
     else:
         cards = Card.query.all()
         return [card.to_dict() for card in cards]
-        
+
 @app.route("/api/cards", methods=["POST"])
 def post_card():
     data = request.get_json()
@@ -41,11 +42,11 @@ def post_card():
         raise CustomError('Missing JSON payload')
 
     # Check if required fields are present in the request
-    required_fields = [ 'username','cardnumber', 'cardtype', 'cvv', 'expirymonth', 'expiryyear','balance']
+    required_fields = ['username', 'cardnumber', 'cardtype', 'cvv', 'expirymonth', 'expiryyear', 'balance']
     for field in required_fields:
         if field not in data:
             raise CustomError(f'Missing {field} field in the request')
-        
+
     if len(str(data['cardnumber'])) != 16:
         raise MissingParameterError(400, "Card number must be Exactly 16 Digits")
     if len(str(data['cvv'])) != 3:
@@ -73,7 +74,7 @@ def put_card(username):
     if not card:
         return {'message': 'Profile not found'}, 404
 
-     # Update the fields provided in the request
+    # Update the fields provided in the request
     for field, value in data.items():
         if hasattr(card, field):
             setattr(card, field, value)
@@ -81,14 +82,11 @@ def put_card(username):
     db.session.commit()
     return card.to_dict(), 200
 
-        # DELETE /api/profile/<username>
 @app.route("/api/cards/<int:id>", methods=["DELETE"])
-def delete_card(username):
-    card = Card.query.filter_by(username=username).first()
+def delete_card(id):
+    card = Card.query.get(id)
     if not card:
-        return {'message': 'card  not found'}, 40
+        return {'message': 'Card not found'}, 404
     db.session.delete(card)
     db.session.commit()
-
-    
-        
+    return {'message': 'Card deleted'}, 200

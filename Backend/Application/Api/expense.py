@@ -13,8 +13,8 @@ from Application.marshal import *
 from Application.exception import *
 from app import app, api, db
 
-CORS(app, orgins=['https://localhost:5173'], methods=["GET", "POST", "PUT", "DELETE"])
 
+CORS(app, orgins=['https://localhost:5173'], methods=["GET", "POST", "PUT", "DELETE"])
 @app.route("/api/exp/<username>", methods=["GET"])
 def get_expense(username):
     expense = Expense.query.filter_by(username=username).first()

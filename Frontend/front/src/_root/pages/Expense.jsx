@@ -4,7 +4,7 @@ const Expenses = () => {
   const [formData, setFormData] = useState({
     username: localStorage.getItem('username'),
     name: '',
-    category: '',
+    category: '', // Updated to use a dropdown for category selection
     amount: '',
   });
   const [formError, setFormError] = useState('');
@@ -90,15 +90,25 @@ const Expenses = () => {
           className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
           required
         />
-        <input
-          type="text"
+        {/* Updated category input to use a dropdown */}
+        <select
           name="category"
-          placeholder="Category"
           value={formData.category}
           onChange={handleChange}
           className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
           required
-        />
+        >
+          <option value="">Select Category</option>
+          <option value="home">Home</option>
+          <option value="work">Work</option>
+          <option value="food">Food</option>
+          <option value="travel">Travel</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="health">Health</option>
+          <option value="education">Education</option>
+          <option value="shopping">Shopping</option>
+        </select>
+        {/* End of updated category input */}
         <input
           type="number"
           name="amount"

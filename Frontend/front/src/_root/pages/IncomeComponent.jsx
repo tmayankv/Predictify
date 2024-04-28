@@ -3,6 +3,9 @@ import IncomeChart from '../../components/charts/IncomeChart';
 
 const IncomeComponent = () => {
   const [incomeData, setIncomeData] = useState([]);
+  const [valid, setValid] = useState(false)
+  const [alert, setAlert] = useState(false)
+
   const [formData, setFormData] = useState({
     username: localStorage.getItem('username'),
     amount: '',
@@ -21,17 +24,21 @@ const IncomeComponent = () => {
     try {
       const response = await fetch(`/api/income/${localStorage.getItem('username')}`);
       if (!response.ok) {
-        console.log("Fetching");
         throw new Error('Failed to fetch income data');
       }
       const data = await response.json();
       setIncomeData(data);
+      setAlert(true)
+      setValid(!valid);
       console.log(data);
     } catch (error) {
       console.error('Error fetching income data:', error);
     }
   };
-
+  
+  incomeData[0]?.map((ele) => {
+    console.log(typeof incomeData );
+  })
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const newValue = name === 'recurring' ? value === 'true' : value;
@@ -42,7 +49,6 @@ const IncomeComponent = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     const { username, amount, source, recurring, day, month, year } = formData;
     if (!username || !amount || !source || !recurring || !day || !month || !year) {
       alert('Please fill in all fields');
@@ -76,6 +82,17 @@ const IncomeComponent = () => {
   };
   return (
     <div className="container mx-auto p-4">
+       {alert && (
+        <div className="bg-indigo-900 text-center py-4 lg:px-4">
+          <div className="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+            <span className="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">{localStorage.getItem("username")},</span>
+            <span className="font-semibold mr-2 text-left flex-auto">Your complaint has been successfully registered with Ref. Number: {complaintNumber}</span>
+            <svg className="fill-current opacity-75 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z"/>
+            </svg>
+          </div>
+        </div>
+      )}
       <h1 className="text-2xl font-bold mb-4 text-white italic text-center">Income Management</h1>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-4">
@@ -150,8 +167,8 @@ const IncomeComponent = () => {
       <div className="mt-4">
         <h2 className="text-xl font-semibold mb-2">Income Data</h2>
         <ul>
-          {Array.isArray(incomeData) &&
-            incomeData.map((income) => (
+          {incomeData[0] &&
+            incomeData[0].map((income) => (
               <li key={income.id}>
                 Username: {income.username}, Amount: {income.amount}, Source: {income.source}
               </li>
@@ -161,7 +178,7 @@ const IncomeComponent = () => {
       <div>
           <>
             <h1 className='text-2xl font-bold text-white text-center mb-4'>Income Charts So Far</h1>
-            <IncomeChart incomeData={incomeData} />
+            <IncomeChart incomeData={incomeData} valid={valid} />
           </>
       </div>
     </div>
