@@ -9,4 +9,6 @@ export { default as Topbar } from './Topbar';
 export {default as NewsBar} from './NewsBar';
 export {default as CampaignBanner} from './CampaignBanner';
 export {default as HomeBox } from './HomeBox';
+export {default as IncomeTable} from './IncomeTable';
+
 

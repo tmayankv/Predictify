@@ -23,7 +23,6 @@ const IncomeChart = ({valid}) => {
           y: ele.y,
         }));
         setGraphData(formattedData);
-        console.log(formattedData);
       }
     } catch (error) {
       console.error('Error fetching graph data:', error);
