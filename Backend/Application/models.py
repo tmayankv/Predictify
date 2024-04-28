@@ -1,5 +1,6 @@
 from Application.config import db
 from flask_login import UserMixin
+from datetime import datetime
 
 
 class User(db.Model, UserMixin):
@@ -129,6 +130,7 @@ class Expense(db.Model):
     day = db.Column(db.Integer, nullable=False)
     month = db.Column(db.Integer, nullable=False)
     year = db.Column(db.Integer, nullable=False)
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -165,14 +167,16 @@ class Profile(db.Model):
             'image': self.image
         }
 class Card(db.Model):
+    __tablename__ = 'cards'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
-    cardnumber = db.Column(db.Integer, nullable=False)
+    cardnumber = db.Column(db.Integer, nullable=False, unique=True)
     cardtype = db.Column(db.String, nullable=False)
     cvv = db.Column(db.Integer, nullable=False)
     expirymonth = db.Column(db.Integer, nullable=False)
     expiryyear = db.Column(db.Integer, nullable=False)
     balance = db.Column(db.Integer, nullable=False)
+    transactions = db.relationship('Transaction', backref='card', lazy=True)
     def to_dict(self):
         return {
             'id': self.id,
@@ -183,4 +187,22 @@ class Card(db.Model):
             'expirymonth': self.expirymonth,
             'expiryyear': self.expiryyear,
             'balance': self.balance
+        }
+
+class Transaction(db.Model):
+    __tablename__ = 'transactions'
+    id = db.Column(db.Integer, primary_key=True)
+    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    transaction_type = db.Column(db.String(10), nullable=False)  # 'credit' or 'debit'
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'card_id': self.card_id,
+            'amount': self.amount,
+            'transaction_type': self.transaction_type,
+            'timestamp': self.timestamp
         }

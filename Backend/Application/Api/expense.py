@@ -64,11 +64,11 @@ def post_expense():
     return expense.to_dict(), 200
 
 @app.route("/api/exp/<username>", methods=["PUT"])
-def put_expense(username):
+def put_expense(id):
     data = request.get_json()
     if not data:
         raise CustomError('Missing JSON payload')
-    expense = Expense.query.filter_by(username=username).first()
+    expense = Expense.query.get(id)
     if not expense:
         return {'message': 'Expense not found'}, 404
     for field, value in data.items():
@@ -77,9 +77,9 @@ def put_expense(username):
     db.session.commit()
     return expense.to_dict(), 200
 
-@app.route("/api/exp/<username>", methods=["DELETE"])
-def delete_expense(username):
-    expense = Expense.query.filter_by(username=username).first()
+@app.route("/api/exp/<int:id>", methods=["DELETE"])
+def delete_expense(id):
+    expense = Expense.query.get(id)
     if not expense:
         return {'message': 'Expense not found'}, 404
     db.session.delete(expense)

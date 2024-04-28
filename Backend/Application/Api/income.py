@@ -66,7 +66,15 @@ def post_income():
     db.session.add(income)
     db.session.commit()
     return {'message': 'Income added successfully'}, 201
-    
+
+@app.route("/api/income/<int:id>", methods=["DELETE"])
+def delete_income(id):
+    income = Income.query.get(id)
+    if not income:
+        return {'message': 'income not found'}, 404
+    db.session.delete(income)
+    db.session.commit()
+    return '', 204  # No content   
 
 
 
