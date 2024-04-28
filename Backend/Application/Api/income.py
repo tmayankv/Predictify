@@ -23,7 +23,7 @@ def get_income(id=None, username=None):
         incomes = Income.query.filter_by(username=username).all()
         if incomes:
             income_data = [income.to_dict() for income in incomes]
-            return {'user income': income_data}, 200
+            return {'user_income': income_data}, 200
         else:
             raise NotFoundError(404, 'Incomes not found for this username')
     elif id:

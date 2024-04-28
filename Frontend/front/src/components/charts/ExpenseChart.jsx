@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChartComponent, SeriesCollectionDirective, SeriesDirective, SplineAreaSeries, Inject, DateTime, Tooltip, Legend, Highlight } from '@syncfusion/ej2-react-charts';
 
-const IncomeChart = ({ valid }) => {
+const ExpenseChart = ({ valid }) => {
   const [graphData, setGraphData] = useState([]);
 
   useEffect(() => {
@@ -10,18 +10,27 @@ const IncomeChart = ({ valid }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`/api/graph/${localStorage.getItem('username')}`);
+      const response = await fetch(`/api/expgraph/${localStorage.getItem('username')}`);
       if (!response.ok) {
         throw new Error('Failed to fetch graph data');
       }
       const data = await response.json();
       const formattedData = data.map(item => ({
-        x: new Date(item.x.year, item.x.month - 1, item.x.day), // Format date for x-axis
-        y: item.y, // Use income amount for y-axis
+        x: new Date(item.x.year, item.x.month - 1, item.x.day),
+        y: item.y, 
       }));
-      const sortedData = formattedData.sort((a, b) => a.x - b.x); // Sort data by x values
+      const sortedData = formattedData.sort((a, b) => a.x - b.x); 
       setGraphData(sortedData);
       console.log(sortedData);
+
+      
+      const leastRecentDate = sortedData.length > 0 ? sortedData[0].x : new Date();
+      console.log('Least recent date:', leastRecentDate);
+
+      const chartElement = document.getElementById('charts');
+      const chartInstance = chartElement.ej2_instances[0];
+      chartInstance.primaryXAxis.minimum = leastRecentDate;
+      chartInstance.refresh(); 
     } catch (error) {
       console.error('Error fetching graph data:', error);
     }
@@ -47,22 +56,24 @@ const IncomeChart = ({ valid }) => {
         primaryXAxis={{
           valueType: 'DateTime',
           majorGridLines: { width: 0 },
+          minorGridLines:{width:0},
           edgeLabelPlacement: 'Shift',
-          labelStyle: { color: 'white' } 
+          labelStyle: { color: 'white' },
+          minimum: new Date()
         }}
         primaryYAxis={{
           labelFormat: 'Rs {value}',
           lineStyle: { width: 2 },
           majorTickLines: { width: 0 },
           minorTickLines: { width: 0 },
-          labelStyle: { color: 'white' } 
+          labelStyle: { color: 'white' }
         }}
         load={load}
         legendSettings={{ visible: true }}
         chartArea={{ border: { width: 0 } }}
         title="Money in Rupees"
         loaded={onChartLoad}
-        tooltip={{ enable: true }} // Enable tooltips
+        tooltip={{ enable: true }}
       >
         <Inject services={[SplineAreaSeries, DateTime, Tooltip, Legend, Highlight]} />
         <SeriesCollectionDirective>
@@ -70,12 +81,12 @@ const IncomeChart = ({ valid }) => {
             dataSource={graphData}
             xName="x"
             yName="y"
-            name="Income"
-            opacity={0.4}
+            name="Expenses"
+            opacity={0.27}
             type="SplineArea"
             width={2}
-            fill="#1d4ed8"
-            border={{ width: 4, color: '#1d4ed8' }}
+            fill="#2563eb"
+            border={{ width: 4, color: '#2563eb' }}
           />
         </SeriesCollectionDirective>
       </ChartComponent>
@@ -83,4 +94,4 @@ const IncomeChart = ({ valid }) => {
   );
 };
 
-export default IncomeChart;
+export default ExpenseChart;

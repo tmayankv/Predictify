@@ -18,10 +18,12 @@ CORS(app, orgins=['https://localhost:5173'], methods=["GET", "POST", "PUT", "DEL
 
 @app.route("/api/exp/<username>", methods=["GET"])
 def get_expense(username):
-    expense = Expense.query.filter_by(username=username).first()
-    if not expense:
+    expenses = Expense.query.filter_by(username=username).all()
+    if not expenses:
         return {'message': 'Expense not found'}, 404
-    return expense.to_dict(), 200
+    else:
+        expense_data = [expense.to_dict() for expense in expenses]
+        return {'user_expense': expense_data}, 200
 
 @app.route("/api/exp", methods=["POST"])
 def post_expense():

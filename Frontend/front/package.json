@@ -19,6 +19,7 @@
     "@syncfusion/ej2-react-grids": "^25.1.41",
     "@thirdweb-dev/react": "^4.4.15",
     "@thirdweb-dev/sdk": "^4.0.42",
+    "axios": "^1.6.8",
     "ethers": "^5.7.2",
     "lucide-react": "^0.352.0",
     "react": "^18.2.0",

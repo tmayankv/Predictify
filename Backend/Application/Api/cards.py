@@ -20,14 +20,12 @@ CORS(app, orgins=['https://localhost:5173'])
 @app.route("/api/cards/<int:id>", methods=["GET"])
 def get_card(id=None, username=None):
     if username:
-        cards = Card.query.filter_by(username=username).all()
-        if cards:
-            card_dicts = [card.to_dict() for card in cards]
-            return jsonify(card_dicts), 200
+        card = Card.query.filter_by(username=username).first()
+        if card:
+            return card.to_dict()
         else:
-            return jsonify({'message': 'No cards found for this username'}), 404
-
-    if id is not None:
+            raise NotFoundError(404, 'Income not found')
+    if id is not None:  # Change this condition to check if id is not None
         card = Card.query.filter_by(id=id).first()
         if card:
             return jsonify(card.to_dict()), 200
@@ -36,8 +34,7 @@ def get_card(id=None, username=None):
 
     else:
         cards = Card.query.all()
-        card_dicts = [card.to_dict() for card in cards]
-        return jsonify(card_dicts), 200
+        return [card.to_dict() for card in cards]
 
 @app.route("/api/cards", methods=["POST"])
 def post_card():
@@ -100,7 +97,7 @@ def delete_card(id):
     db.session.commit()
     return {'message': 'Card deleted'}, 200
 
-@app.route("/api/cards/<int:id>/credit", methods=["PUT"])
+@app.route("/api/cards/<int:id>/credit", methods=["POST"])
 def credit_card_balance(id):
     data = request.get_json()
     if not data or 'amount' not in data:
@@ -124,7 +121,7 @@ def credit_card_balance(id):
     db.session.commit()
     return card.to_dict(), 200
 
-@app.route("/api/cards/<int:id>/debit", methods=["PUT"])
+@app.route("/api/cards/<int:id>/debit", methods=["POST"])
 def debit_card_balance(id):
     data = request.get_json()
     if not data or 'amount' not in data:
