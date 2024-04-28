@@ -176,7 +176,7 @@ class Card(db.Model):
     expirymonth = db.Column(db.Integer, nullable=False)
     expiryyear = db.Column(db.Integer, nullable=False)
     balance = db.Column(db.Integer, nullable=False)
-    transactions = db.relationship('Transaction', backref='card', lazy=True)
+    transactions = db.relationship('Transaction', backref='card', cascade='all, delete', lazy=True)
     def to_dict(self):
         return {
             'id': self.id,
@@ -192,7 +192,7 @@ class Card(db.Model):
 class Transaction(db.Model):
     __tablename__ = 'transactions'
     id = db.Column(db.Integer, primary_key=True)
-    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey('cards.id', ondelete='cascade'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     transaction_type = db.Column(db.String(10), nullable=False)  # 'credit' or 'debit'
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
