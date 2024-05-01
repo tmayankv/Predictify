@@ -10,9 +10,9 @@ class LocalDevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///Predictify.sqlite3'
 
-    SECRET_KEY =  'vish_30 is the secret key'
+    SECRET_KEY =  'bagga is the secret key'
     SECURITY_REGISTERABLE = True
-    SECURITY_PASSWORD_SALT = 'vish_30 is the salt'
+    SECURITY_PASSWORD_SALT = 'bagga is the salt'
 
 
 

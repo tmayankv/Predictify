@@ -13,6 +13,7 @@ export {default as IncomeTable} from './IncomeTable';
 export {default as ExpenseTable} from './ExpenseTable';
 export {default as CardTransaction} from './CardTransaction';
 export {default as TransactionTable} from './TransactionTable';
+export {default as PlatformSettings} from './PlatformSettings';
 
 
 

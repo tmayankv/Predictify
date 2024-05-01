@@ -56,7 +56,7 @@ def post_profile():
     db.session.commit()
     return profile.to_dict(), 201  # 201 status code for resource created
 
-@app.route("/api/profile/<username>", methods=["PUT"])
+@app.route("/api/profile/<username>", methods=["POST"])
 def put_profile(username):
     data = request.get_json()
     if not data:

@@ -1,12 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
+.hovering_element{
+    transition: all 0.3s ease-in-out;
+}
 .hovering-element:hover{
     background: rgb(98, 43, 169);
     color: antiquewhite;
-    transition: all 0.2s linear;
 }
 
 @media (max-width: 568px){
@@ -15,6 +18,13 @@
     }
    
 }
+.root{
+    font-family: 'Montserrat', 'calibri';
+}
+/* .bg-do{
+    background: url('https://imgs.search.brave.com/pHyVefPQirGoOoeq9UVCcYNlE6Xq4H4-bOFxDxEgoK8/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzdlLzM3/L2RiLzdlMzdkYjg4/MzE0NTMzYjQwNmIw/NTEzZjhkZGI3Y2E4/LmpwZw') fixed;
+    backdrop-filter: blur;
+} */
 #retire-form label{
     width: 100%;
     display: flex;
@@ -49,7 +59,9 @@ input:placeholder-shown,input, select, textarea {
     background-color: rgba(67, 67, 67, 0.456);
     color: white;
     border: none;
+    border: 1px solid rgba(255, 255, 255, 0.338);
+    transition: all linear 0.4s;
 }
-input:focus{
+input:focus, textarea:focus{
     border: 1px solid white;
 }

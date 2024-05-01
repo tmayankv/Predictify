@@ -12,9 +12,9 @@ const Expense = () => {
     year:'',
   });
   const [formError, setFormError] = useState('');
+  const [valid, setValid] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 const [alertMessage, setAlertMessage] = useState('');
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -22,7 +22,6 @@ const [alertMessage, setAlertMessage] = useState('');
       [name]: value,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { username, name, category, amount } = formData;
@@ -44,9 +43,9 @@ const [alertMessage, setAlertMessage] = useState('');
       if (!response.ok) {
         throw new Error('Failed to add expense');
       }
-  
       setShowAlert(true);
       setAlertMessage('Expense added successfully');
+      setValid(!valid)
       setFormError('');
       setFormData({
         ...formData,
@@ -57,7 +56,6 @@ const [alertMessage, setAlertMessage] = useState('');
         month: null,
         year: null,
       });
-      // fetchExpenses();
     } catch (error) {
       console.error('Error adding expense:', error);
       setFormError('Error adding expense. Please try again later.');
@@ -66,7 +64,7 @@ const [alertMessage, setAlertMessage] = useState('');
     }
   };
   return (
-    <div className="container mx-auto mt-8">
+    <div className="container mx-auto mt-8 w-[78vw]" style={{ background: 'linear-gradient(to top, rgba(82, 130, 224, 0.41), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
       {showAlert && (
   <div className="bg-indigo-900 text-center py-4 lg:px-4">
     <div className="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
@@ -85,22 +83,22 @@ const [alertMessage, setAlertMessage] = useState('');
     </div>
   </div>
 )}
-      <h1 className="text-3xl font-bold mb-4 text-center text-white">Expenses</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <h1 className="text-3xl font-bold mb-4 text-center text-white">Expenses Management</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2 mx-10">
         <input
           type="text"
           name="name"
           placeholder="Expense Name"
           value={formData.name}
           onChange={handleChange}
-          className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+          className=" w-full md:w-1/3 self-center  rounded-md px-4 py-2 focus:outline-none focus:-blue-500"
           required
         />
         <select
           name="category"
           value={formData.category}
           onChange={handleChange}
-          className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+          className=" w-full md:w-1/3 self-center  rounded-md px-4 py-2 focus:outline-none focus:-blue-500"
           required
         >
           <option value="">Select Category</option>
@@ -119,16 +117,16 @@ const [alertMessage, setAlertMessage] = useState('');
           placeholder="Amount"
           value={formData.amount}
           onChange={handleChange}
-          className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+          className=" w-full md:w-1/3 self-center  rounded-md px-4 py-2 focus:outline-none focus:-blue-500"
           required
         />
-        <div className='flex justify-center gap-5 md:flex-row flex-col mx-2'>
+        <div className='flex justify-center items-center gap-3 lg:flex-row flex-col mx-2'>
          <input
           type="number"
           name="day"
           placeholder="Day"
           value={formData.day}
-          className="border md:w-1/3 border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+          className=" md:w-1/6  rounded-md px-4 py-2 focus:outline-none focus:-blue-500"
           onChange={handleChange}
           />
         <input
@@ -136,7 +134,7 @@ const [alertMessage, setAlertMessage] = useState('');
           name="month"
           placeholder="Month"
           value={formData.month}
-          className="border border-gray-300 md:w-1/3 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+          className="  md:w-1/6 rounded-md px-4 py-2 focus:outline-none focus:-blue-500"
           onChange={handleChange}
           />
         <input
@@ -144,21 +142,20 @@ const [alertMessage, setAlertMessage] = useState('');
           name="year"
           placeholder="Year"
           value={formData.year}
-          className="border border-gray-300 md:w-1/3 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+          className="  md:w-1/6 rounded-md px-4 py-2 focus:outline-none focus:-blue-500"
           onChange={handleChange}
           />
           </div>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+          className="px-4 w-1/2 sm:w-1/4 self-center py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
         >
           Add Expense
         </button>
       </form>
       <div className="mt-4">
-        <h2 className="text-xl font-semibold mb-2">Expense List</h2>
-        <ExpenseTable />
-        <ExpenseChart />
+        <ExpenseTable valid={valid} />
+        <ExpenseChart valid={valid} />
       </div>
     </div>
   );

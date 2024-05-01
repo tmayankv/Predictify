@@ -1,9 +1,9 @@
-import { HandCoinsIcon, HomeIcon, ListPlusIcon, LogOut, UserRound, WalletCardsIcon, Blocks, ShieldHalf, Wallet2, BookUpIcon } from "lucide-react";
+import { HandCoinsIcon, HomeIcon, ListPlusIcon, LogOut, UserRound, WalletCardsIcon, Blocks, ShieldHalf, Wallet2, BookUpIcon, LucideBellRing, ContactIcon } from "lucide-react";
 export const navlinks = [
   {
-    name: 'Home',
+    name: 'Dashboard',
     icon:HomeIcon,
-    link: '/',
+    link: '/dashboard',
   },
   {
     name: 'profile',
@@ -11,9 +11,19 @@ export const navlinks = [
     link: '/profile',
   },
   {
+    name: 'Notifications',
+    icon: LucideBellRing,
+    link: '/notifications',
+  },
+  {
     name: 'campaign',
     icon: ListPlusIcon,
     link: '/create-campaign',
+  },
+  {
+    name: 'all campaigns',
+    icon: Blocks,
+    link: '/all-campaigns',
   },
   {
     name: 'expense',
@@ -26,14 +36,13 @@ export const navlinks = [
     link: '/billing',
   },
   {
-    name: 'all campaigns',
-    icon: Blocks,
-    link: '/all-campaigns',
+    name: 'Contact',
+    icon: ContactIcon,
+    link: '/contact',
   },
   {
     name: 'Income Management',
     icon: WalletCardsIcon,
     link: '/income-management',
   },
-  
 ];

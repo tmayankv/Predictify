@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { CardTransaction, TransactionTable } from '../../../components';
-
 const Billing = () => {
   const [cards, setCards] = useState([]);
   const [transactionHist, setTransactionHist] = useState([]);
@@ -18,8 +17,7 @@ const Billing = () => {
   useEffect(() => {
     fetchCardsData();
     handleTransactionhistory();
-  }, [transactionHist,cards]);
-
+  }, []);
   const fetchCardsData = async () => {
     try {
       const response = await fetch(`/api/cards/${localStorage.getItem('username')}`);
@@ -46,7 +44,6 @@ const Billing = () => {
         expiryyear: expiryYear,
         balance: currentBalance,
       };
-
       const response = await fetch('/api/cards', {
         method: 'POST',
         headers: {
@@ -58,7 +55,6 @@ const Billing = () => {
       if (!response.ok) {
         throw new Error('Failed to add card');
       }
-
       const data = await response.json();
       setCards([...cards, data]);
       setMessage('Card added successfully');
@@ -69,7 +65,6 @@ const Billing = () => {
       setError('Error adding card. Please try again.');
     }
   };
-
   const handleDeleteCard = async (id) => {
     setError('');
     try {
@@ -80,15 +75,12 @@ const Billing = () => {
       const updatedCards = cards.filter((card) => card.id !== id);
       setCards(updatedCards);
       fetchCardsData();
-      handleTransactionhistory()
       setMessage('Card deleted successfully');
     } catch (error) {
       console.error('Error deleting card:', error);
       setError('Error deleting card. Please try again.');
     }
   };
-  
-
   const handleTransactionhistory = async () => {
     try {
       const response = await fetch(`/api/cards/${localStorage.getItem("username")}/transactions`, {
@@ -105,7 +97,6 @@ const Billing = () => {
       setError('Error fetching transaction history. Please try again.');
     }
   };
-
   const handleTransaction = async (cardId, transactionType) => {
     const transaction= transactionType === 'Debit'? 'debit':'credit'
     setError('');
@@ -115,7 +106,6 @@ const Billing = () => {
         type: transactionType,
         message: message,
       };
-
       const response = await fetch(`/api/cards/${cardId}/${transaction}`, {
         method: 'POST',
         headers: {
@@ -123,17 +113,15 @@ const Billing = () => {
         },
         body: JSON.stringify(formData),
       });
-
       if (!response.ok) {
         throw new Error('Failed to complete transaction');
       }
-
       const data = await response.json();
       const updatedCards = cards.map((card) =>
         card.id === cardId ? { ...card, balance: data.balance } : card
       );
       handleTransactionhistory();
-      fetchCardsData();
+      // fetchCardsData();
       setCards(updatedCards);
       setMessage('Transaction completed successfully');
       setTransactionAmount('');
@@ -143,7 +131,6 @@ const Billing = () => {
       setError('Error completing transaction. Please try again.');
     }
   };
-
   const clearFormFields = () => {
     setCardNumber('');
     setExpiryMonth('');
@@ -151,12 +138,11 @@ const Billing = () => {
     setCvv('');
     setCurrentBalance('');
   };
-
   return (
-    <div className="container mx-auto p-4 min-[500px]:w-[82vw] w-[75vw]">
+    <div className="container mx-auto p-4 min-[500px]:w-[82vw] w-[75vw] rounded-xl" style={{ background: 'linear-gradient(to top, rgba(82, 130, 224, 0.41), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
       <h1 className="text-3xl text-white itlaic font-bold mb-4 text-center">Billing Management</h1>
-
-      <div className="rounded-lg shadow-md p-4 mb-10 text-white"  style={{ background: 'linear-gradient(to top, rgba(2, 0, 94, 0.5), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
+    <div className='flex gap-2'>
+      <div className="rounded-lg shadow-md p-4 mb-10 text-white w-full"   style={{ background: 'linear-gradient(to top, rgba(82, 130, 194, 0.21), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
           <h2 className="text-xl font-semibold mb-2 ">Add New Card</h2>
           <div className="flex flex-col gap-2">
             <label htmlFor="cardType">Card Type:</label>
@@ -213,10 +199,10 @@ const Billing = () => {
               Add Card
             </button>
           </div>
+    
         </div>
+    </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-       
-
         { cards?.map((card) => (
             <CardTransaction
               key={card.id}
@@ -233,7 +219,6 @@ const Billing = () => {
           ))}
       </div>
       <div>
-
       {transactionHist && transactionHist.map(ele =>{
         return <TransactionTable key={ele.id} title={ele.card_number} transaction={ele} />
       }) }

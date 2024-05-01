@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'
 import { GridComponent, ColumnsDirective, ColumnDirective, Edit, Page, Selection, Sort, Filter, Toolbar, Inject } from '@syncfusion/ej2-react-grids';
-
-
 const customerGridRecurring = (props) => (
   <div className="flex gap-2 justify-center items-center text-gray-700 capitalize">
     <p style={{ background: props.Recurring === "Yes" ? '#8BE78B' : '#b91c1c' }} className="rounded-full h-3 w-3" />
     <p>{props.Recurring}</p>
   </div>
 );
-
 const customersGrid = [
   { type: 'checkbox', width: '50' },
   { field: 'Source', headerText: 'Source', width: '150', textAlign: 'Center' },
@@ -18,15 +14,12 @@ const customersGrid = [
   { field: 'Date', headerText: 'Date', width: '150', textAlign: 'Center' },
   { field: 'ActionID', headerText: 'ActionID', width: '120', textAlign: 'Center', isPrimaryKey: true },
 ];
-
 function IncomeTable({valid}) { 
   const [incomeData, setIncomeData] = useState([]);
   const [tableData, setTableData] = useState([]);
-
   useEffect(() => {
     fetchData();
   }, [valid]);
-
   const fetchData = async () => {
     try {
       const response = await fetch(`/api/income/${localStorage.getItem('username')}`);
@@ -39,10 +32,7 @@ function IncomeTable({valid}) {
         console.error('Error fetching income data:', error);
     }
 };
-console.log(tableData)
-  
   const handleActionComplete = async (args) => {
-    console.log(args)
     if (args.requestType === 'delete') {
       try {
         const response = await fetch(`/api/income/${args.data[0].id}`, {
@@ -54,15 +44,12 @@ console.log(tableData)
         if (!response.ok) {
           throw new Error('Failed to delete income data');
         }
-        fetchData(); // Fetch updated data after successful deletion
-        console.log('Income deleted successfully');
+        fetchData();
       } catch (error) {
         console.error('Error deleting income data:', error);
       }
     }
   };
-  
-
   useEffect(() => {
     if (incomeData && incomeData.user_income) {
       const formattedData = incomeData.user_income.map((ele, i) => ({
@@ -76,19 +63,17 @@ console.log(tableData)
       setTableData(formattedData);
     }
   }, [incomeData]);
-  
-
   return (
-    <div className="m-2 md:m-10 p-2 md:p-10 rounded-3xl" style={{ background: 'linear-gradient(to right, rgb(0,185,222,0.3), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
-      <h1 className="text-3xl font-semibold text-white italic text-center mb-2">INCOME DATA:</h1>
+    <div className="m-2 md:m-10 p-2 md:p-10 rounded-3xl w-[81vw]"  >
+      <h1 className="text-2xl font-semibold text-white text-center mb-4">INCOME DATA</h1>
       <GridComponent
         id="gridComp"
-        dataSource={tableData} // Use tableData as the data source
+        dataSource={tableData}
         allowPaging
         allowSorting
         toolbar={['Delete']}
         editSettings={{ allowDeleting: true, allowEditing: true }}
-        actionComplete={handleActionComplete} // Add actionComplete event handler
+        actionComplete={handleActionComplete}
       >
         <ColumnsDirective>
           {customersGrid.map((item, i) => (

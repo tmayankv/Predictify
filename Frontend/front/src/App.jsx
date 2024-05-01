@@ -6,13 +6,13 @@ import Register from "./_auth/forms/Register"
 import Login from "./_auth/forms/Login"
  import { useEffect } from "react"
  import './App.css';
-import { Home, Contact, AllCampaigns,IncomeComponent, Profile, CreateCampaign, CampaignDetails, Billing, Expense} from "./_root/pages/index"
+import { Home, Contact, AllCampaigns,IncomeComponent,LandPage, Profile, CreateCampaign, CampaignDetails, Billing, Expense} from "./_root/pages/index"
+import Notifications from "./_root/pages/Notifications"
 
 const App = () => {
   const navigate = useNavigate()
   useEffect(() =>{
     {localStorage.getItem('authentication') ==="false" && navigate('/login')}
-    console.log(localStorage.getItem('authentication'))
   },[localStorage.getItem('authentication')])
 
   return (
@@ -22,7 +22,9 @@ const App = () => {
             <Route path="/login" element={<Login />} />
           </Route>
           <Route element={<RootLayout />} >
-            <Route index element={< Home />} />
+          <Route index element={< LandPage />} />
+            <Route path="/notifications" element={< Notifications />} />
+            <Route path="/dashboard" element={< Home />} />
             <Route path="/all-campaigns" element={< AllCampaigns/>} />
             <Route path="/create-campaign" element={< CreateCampaign />} />
             <Route path="/campaign-details/:id" element={< CampaignDetails />} />
@@ -31,6 +33,9 @@ const App = () => {
             <Route path="/income-management" element={< IncomeComponent />} />
             <Route path="/profile" element={< Profile />} />
             <Route path="/billing" element={< Billing />} />
+            <Route path="/notifications" element={< Notifications />} />
+
+            
 
 
           </Route>

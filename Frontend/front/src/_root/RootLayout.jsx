@@ -3,11 +3,12 @@ import  Topbar from '../components/Topbar';
 import  Sidebar  from '../components/Sidebar';
 import { useStateContext } from '../context/StateContext';
 import { Menu, CircleX} from 'lucide-react';
+import Footer from '../components/Footer';
+import { Loader } from '../components';
 const RootLayout = () => {
-const {showBar, setshowBar}= useStateContext()
-
+const {showBar, setshowBar,isLoading}= useStateContext()
   return (
-    <div className={`flex bg-slate-900 p-2 max-h-screen overflow-y-auto max-w-screen overflow-x-auto `}>
+    <div className={`flex bg-slate-950 p-2 max-h-screen overflow-y-auto max-w-screen overflow-x-auto `}>
       <div className={`flex ${showBar && "mr-1"}`}>
       <Sidebar showBAr={showBar}/>
       </div>
@@ -21,8 +22,12 @@ const {showBar, setshowBar}= useStateContext()
       <Topbar />
       </div>
         </div>
-    <div className="bg-slate-900 h-screen mt-10">
+    <div className=" h-screen pt-5 rounded-lg mt-10 ">
+     
       <Outlet />
+      
+      <hr className='mt-10 px-5' />
+    <Footer />
     </div>
       </div>
   </div>

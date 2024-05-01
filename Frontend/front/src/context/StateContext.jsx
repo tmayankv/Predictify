@@ -15,18 +15,81 @@ export const StateContextProvider = ({ children }) => {
   const [isLoading, setisLoading] = useState(true)
   const [showBar, setshowBar] = useState(true)
   const[walletBalance, setWalletBalance] = useState("")
-  const [logInfo, setLogInfo] = useState({
-    username: "",
-    password:""
-  })
-
+  const [notifications, setNotification] = useState([]);
+  
+  
   const address = useAddress();
   const connect = useMetamask()
   const navigate= useNavigate()
   const disconnect = useDisconnect()
+  const fetchCardsData = async () => {
+      try {
+        const response = await fetch(`/api/cards/${localStorage.getItem('username')}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch cards data');
+        }
+        const data = await response.json();
+        const notifications = data.map((card) => ({
+          title: "A New " + card.cardtype + " of Card Number ",
+          val: card.cardnumber + " was added to the records that ",
+          msg: 'is currently holding Rs ' + card.balance  
+        }));
+    
+        setNotification(notifications);
+      } catch (error) {
+        console.error('Error fetching cards:', error);
+        setError('Error fetching cards. Please try again.');
+      }
+    };
+    
+    const fetchExpenses = async() =>{
+        try {
+            const response = await fetch(`/api/exp/${localStorage.getItem('username')}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch income data');
+              }
+              const data = await response.json();
+              const newNotifications = data.user_expense.map((ele) => ({
+                  title: "On " + new Date(ele.year, ele.month, ele.day),
+                  val: "Rs " + ele.amount + " Expense was added for category",
+                  msg: ele.category,
+                }));
+                      
+                setNotification((prevNotifications) => [...prevNotifications, ...newNotifications]);      
+              } catch (error) {
+                      console.error('Error fetching income data:', error);
+                  }
+              }
+const fetchIncome = async() =>{
+  try {
+      const response = await fetch(`/api/income/${localStorage.getItem('username')}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch income data');
+      }
+      const data = await response.json();
+      
+      const newNotifications = data.user_income.map((ele) => ({
+          title: "On " + new Date(ele.year, ele.month, ele.day),
+          val: "another Rs  Income of " + ele.amount + " was added through the medium of ",
+          msg: ele.recurring,
+        }));
+              
+        setNotification((prevNotifications) => [...prevNotifications, ...newNotifications]);
+    } catch (error) {
+        console.error('Error fetching income data:', error);
+    }
+
+}
+
+  const [logInfo, setLogInfo] = useState({
+    username: "",
+    password:""
+  })
+  
+
+  localStorage.setItem('authentication', false)
   useEffect(() => {
-    localStorage.setItem('authentication', true)
-    if(!localStorage) localStorage.setItem('authentication', false)
+    // if(!localStorage) localStorage.setItem('authentication', false)
     if (localStorage.getItem('authentication') === false){
         navigate('/login')
       }
@@ -47,8 +110,6 @@ export const StateContextProvider = ({ children }) => {
 
   const handleLogInfo = (user, pass) =>{
     setLogInfo({username:user, password:pass})
-    console.log(user)
-    console.log(pass)
   }
   const handleAuth = (user, pass) =>{
     setisAuth(!isAuth);
@@ -56,7 +117,7 @@ export const StateContextProvider = ({ children }) => {
     localStorage.setItem('authentication', true);
     localStorage.setItem('username', user)
     localStorage.setItem('password', pass)
-      navigate('/')
+      navigate('/dashboard')
     }
     else{
       disconnect();
@@ -103,8 +164,6 @@ export const StateContextProvider = ({ children }) => {
           }
         })
         const datenow= new Date()
-        console.log(daysLeft(parsedData.deadline))
-        console.log(typeof daysLeft(parsedData.deadline))
         const filterData=  parsedData.filter(item => !daysLeft(item.deadline).startsWith('-'))
         setisLoading(false)
         return filterData
@@ -165,7 +224,11 @@ export const StateContextProvider = ({ children }) => {
          disconnect,
          setWalletBalance,
          handleLogInfo,
-         logInfo
+         logInfo,
+         fetchCardsData,
+         fetchExpenses,
+         fetchIncome,
+         notifications,
       }}
     >  
       {children}

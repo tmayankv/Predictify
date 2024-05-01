@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 const Contact = () => {
   const [formData, setFormData] = useState({
     username: localStorage.getItem('username'),
@@ -11,7 +10,6 @@ const Contact = () => {
   const [alert, setAlert] = useState(false);
   const [complaintNumber, setComplaintNumber] = useState('');
   const [submissionTime, setSubmissionTime] = useState(null);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -19,7 +17,6 @@ const Contact = () => {
       [name]: value,
     }));
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     const imageUrl = URL.createObjectURL(file);
@@ -28,11 +25,9 @@ const Contact = () => {
       image: imageUrl,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData)
       const response = await fetch('/api/contactforms', {
         method: 'POST',
         headers: {
@@ -45,7 +40,6 @@ const Contact = () => {
         throw new Error('Failed to submit form. Server returned ' + response.status);
       }
       const data = await response.json();
-      console.log(data);
       setComplaintNumber(data.complaint_number);
       setAlert(true);
       setFormData({
@@ -60,7 +54,6 @@ const Contact = () => {
       setFormError('Error submitting form. Please try again later.');
     }
   };
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAlert(false);
@@ -68,7 +61,6 @@ const Contact = () => {
 
     return () => clearTimeout(timeout); // Clear the timeout on component unmount
   }, [alert]);
-
   return (
     <div className="container mx-auto mt-8 flex flex-col w-[75vw]">
       {alert && (
@@ -99,7 +91,7 @@ const Contact = () => {
           placeholder="Message"
           value={formData.message}
           onChange={handleChange}
-          className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+          className=" rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
           rows={5}
           required
         ></textarea>
@@ -109,7 +101,7 @@ const Contact = () => {
           accept="image/*"
           id='image-input'
           onChange={handleImageChange}
-          className="bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+          className=" rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
           required
         />
         <button

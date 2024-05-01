@@ -1,4 +1,4 @@
-import { ContactIcon } from "lucide-react";
+import { ContactIcon, UserSearchIcon } from "lucide-react";
 export const toplinks = [
     {
       name: 'Contact',
@@ -7,14 +7,8 @@ export const toplinks = [
     },
     {
         name: 'About',
-        icon: ContactIcon,
-        link: '/contact',
+        icon: UserSearchIcon,
+        link: '/About',
       },
-      {
-        name: 'Contact',
-        icon: ContactIcon,
-        link: '/contact',
-      },
-      
     
   ];

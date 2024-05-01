@@ -6,18 +6,15 @@ import { LucideLoaderCircle } from 'lucide-react';
 const AllCampaigns = () => {
   const { getCampaigns, contract, address, isLoading } =useStateContext();
   const [Data, setData] = useState([])
-  console.log(address)
 const getDetail = async () =>{
   const data= await getCampaigns()
-  console.log(data)
   setData(data)
 }
 useEffect(() => {
   if(contract) getDetail()
 }, [address,contract])
-console.log(Data)
   return (
-    <div className={`flex gap-5 flex-wrap justify-center ${isLoading && 'h-screen'} ${Data && 'h-max'}`}>
+    <div className={`flex rounded-xl p-2 gap-5 flex-wrap justify-center ${isLoading && 'h-screen'} ${Data && 'h-max'}`} style={{ background: 'linear-gradient(to top, rgba(82, 130, 224, 0.41), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
       {isLoading &&
       <div className="text-white text-2xl">
         <LucideLoaderCircle />
@@ -28,7 +25,7 @@ console.log(Data)
           <CampaignCard campaign={campaign} key={campaign.id} />
         ))
       ) : (
-        <div className="text-white text-2xl">
+        <div className={`${isLoading && "hidden"} text-white text-2xl`}>
           No Campaigns are active at the moment
         </div>
       )}

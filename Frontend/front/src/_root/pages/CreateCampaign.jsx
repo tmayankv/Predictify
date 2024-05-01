@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
-
 import { useStateContext } from '../../context/StateContext';
 import { money } from '../../assets';
 import Form from '../../shared components/Form';
 import { checkIfImage } from '../../utils';
 import {Loader} from 'lucide-react'
-
 const CreateCampaign = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { createCampaign, isAuth} = useStateContext();
-  console.log(isAuth)
   const [form, setForm] = useState({
     name: '',
     title: '',
@@ -21,27 +18,23 @@ const CreateCampaign = () => {
     deadline: '',
     image: ''
   });
-
   const handleFormChange = (fieldName, e) => {
     setForm({ ...form, [fieldName]: e.target.value })
   }
-  console.log("form", form)
   const handleSubmit = async (e) => {
     e.preventDefault();
     checkIfImage(form.image, async (exists) => {
       if(exists) {
         setIsLoading(true)
-        console.log('Image')
         await createCampaign({ ...form, target: ethers.utils.parseUnits(form.target, 18)})
         setIsLoading(false);
-        navigate('/');
+        navigate('/dashboard');
       } else {
         alert('Provide valid image URL')
         setForm({ ...form, image: '' });
       }
     })
   }
-
   return (
     <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
       {isLoading && <Loader />}
@@ -65,7 +58,6 @@ const CreateCampaign = () => {
             handleChange={(e) => handleFormChange('title', e)}
             />
         </div>
-
         <Form 
             labelName="Story *"
             placeholder="Write your story"
@@ -74,7 +66,7 @@ const CreateCampaign = () => {
             handleChange={(e) => handleFormChange('description', e)}
             />
 
-        <div className="w-full flex justify-start items-center p-4 bg-[#8c6dfd] h-[120px] rounded-[10px]">
+        <div className="w-full flex justify-start items-center p-4 bg-blue-500 h-[120px] rounded-[10px]">
           <img src={money} alt="money" className="w-[40px] h-[40px] object-contain"/>
           <h4 className="font-epilogue font-bold text-[25px] text-white ml-[20px]">You will get 100% of the raised amount</h4>
         </div>
@@ -105,7 +97,7 @@ const CreateCampaign = () => {
           />
 
           <div className="flex justify-center items-center mt-[40px]">
-           <button className="flex w-full justify-center p-3 rounded-xl bg-violet-500 text-white">{isLoading? "Loading.....":'Submit'}</button>
+           <button className="flex w-full justify-center p-3 rounded-xl bg-blue-500 text-white">{isLoading? "Loading.....":'Submit'}</button>
           </div>
       </form>
     </div>

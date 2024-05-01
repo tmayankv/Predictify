@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { GridComponent, ColumnsDirective,
   ColumnDirective, Toolbar,
-  Page, Search, Inject } from '@syncfusion/ej2-react-grids';
+  Page, Search, Inject, Sort} from '@syncfusion/ej2-react-grids';
 import {  BadgeIndianRupeeIcon, Type } from 'lucide-react';
 const gridEmployeeCountry = (props) => (
     <div className="flex items-center justify-center gap-2">
@@ -9,22 +9,11 @@ const gridEmployeeCountry = (props) => (
       <span>{props.Amount}</span>
     </div>
   );
-
   const gridIconChange = (props) =>(
     <div className="flex items-center justify-center gap-2">
     <span className='p-1 px-2 rounded-xl' style={{background: props.Type === 'credit'? "#4ade80":"#f87171"}}>{props.Type}</span>
   </div>
   )
-export const employeesData = [
-    {
-      ID: 1,
-      Date: 'Nancy Davolio',
-      cardNumber: '1254203256985264',
-      Type: 'credit',
-      Amount: 1020,
-      Balance: 'Carson',
-    },
-]
 export const employeesGrid = [
     
     { field: 'ID',
@@ -58,12 +47,9 @@ export const employeesGrid = [
       textAlign: 'Center' },
   ];
 const TransactionTable = ({transaction, title}) => {
-  console.log(transaction);
     const [Balance, setBalance] = useState(transaction.balance)
     const [cardN, setcardN] = useState(transaction.card_number)
-    
     const [TableData, setTableData] = useState([])
-    
     useEffect(()=>{
             if (transaction && transaction.transaction_history) {
               const formattedData = transaction.transaction_history.map((ele, i) => ({
@@ -79,7 +65,7 @@ const TransactionTable = ({transaction, title}) => {
             }
           }, [transaction]);
   return (
-    <div className="m-2 text-white md:m-10 p-2 md:p-10 bg-white rounded-3xl" style={{ background: 'linear-gradient(to top, rgb(0,55,222,0.3), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
+    <div className="m-2 text-white md:m-10 p-2 md:p-10 bg-white rounded-3xl" style={{ background: 'linear-gradient(to top, rgba(82, 130, 194, 0.21), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
       <h1 className="text-center text-2xl max-[400px]:text-lg mb-6 font-bold ">Transaction History of Your Card '{title}'</h1>
       <GridComponent
         id="gridComp"
@@ -101,7 +87,7 @@ const TransactionTable = ({transaction, title}) => {
             />
           ))}
         </ColumnsDirective>
-        <Inject services={[Page, Search, Toolbar]} />
+        <Inject services={[Page, Search, Toolbar,Sort]} />
       </GridComponent>
     </div>
   )

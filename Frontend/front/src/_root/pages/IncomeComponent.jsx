@@ -6,7 +6,6 @@ const IncomeComponent = () => {
   const [valid, setValid] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-
   const [formData, setFormData] = useState({
     username: localStorage.getItem('username'),
     amount: '',
@@ -16,9 +15,6 @@ const IncomeComponent = () => {
     month: '',
     year: '',
   });
-
-  
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const newValue = name === 'recurring' ? value === 'true' : value;
@@ -27,7 +23,6 @@ const IncomeComponent = () => {
       [name]: newValue,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
     const { username, amount, source, recurring, day, month, year } = formData;
@@ -50,7 +45,6 @@ const IncomeComponent = () => {
       setAlertMessage('Income added successfully');
       setValid(!valid)
       setShowAlert(true);
-      // fetchData(); // Update fetched data after successful submission
       setFormData({
         username: '',
         amount: '',
@@ -64,11 +58,10 @@ const IncomeComponent = () => {
       console.error('Error adding income:', error);
     }
   };
-
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 rounded-xl flex flex-col items-center w-[77vw]"  style={{ background: 'linear-gradient(to top, rgba(82, 130, 194, 0.41), rgba(0, 0, 0, 0.8))', backdropFilter: 'blur(10px)' }}>
       {showAlert && (
-        <div className="bg-indigo-900 text-center py-4 lg:px-4">
+        <div className="bg-indigo-900 text-center py-4 lg:px-4 ">
           <div className="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
             <span className="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">
               {localStorage.getItem('username')},
@@ -84,8 +77,8 @@ const IncomeComponent = () => {
           </div>
         </div>
       )}
-      <h1 className="text-2xl font-bold mb-4 text-white italic text-center">Income Management</h1>
-      <form onSubmit={handleSubmit}>
+      <h1 className="text-2xl font-bold mb-4 text-white text-center">Income Management</h1>
+      <form onSubmit={handleSubmit} className='w-1/2 flex flex-col '>
         <div className="grid grid-cols-1 gap-4">
           <div className="flex flex-col gap-2 ">
             <input
@@ -117,7 +110,7 @@ const IncomeComponent = () => {
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
-            <div className="flex gap-2 max-[700px]:flex-wrap">
+            <div className="flex gap-2 flex-wrap">
               <input
                 type="number"
                 name="day"
@@ -155,14 +148,11 @@ const IncomeComponent = () => {
           Add Income
         </button>
       </form>
-      <div className="mt-4">
+      <div className="my-10">
         <IncomeTable valid={valid}  />
       </div>
-      <div>
-        <>
-          <h1 className="text-2xl font-bold text-white text-center mb-4">Income Charts So Far</h1>
           <IncomeChart valid={valid} />
-        </>
+      <div>
       </div>
     </div>
   );

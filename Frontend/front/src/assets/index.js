@@ -13,6 +13,10 @@ import money from './money.svg';
 import loader from './loader.svg';
 import thirdweb from './thirdweb.png';
 import unplug from './unplug.svg';
+import FWlogo from './FW Logo.png';
+import img1 from './img1.jpg';
+
+
 
 
 export {
@@ -31,4 +35,6 @@ export {
   loader,
   thirdweb,
   unplug,
+  FWlogo,
+  img1
 };
