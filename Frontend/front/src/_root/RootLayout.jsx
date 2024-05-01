@@ -7,6 +7,7 @@ import Footer from '../components/Footer';
 import { Loader } from '../components';
 const RootLayout = () => {
 const {showBar, setshowBar,isLoading}= useStateContext()
+console.log(localStorage.getItem('authentication'))
   return (
     <div className={`flex bg-slate-950 p-2 max-h-screen overflow-y-auto max-w-screen overflow-x-auto `}>
       <div className={`flex ${showBar && "mr-1"}`}>

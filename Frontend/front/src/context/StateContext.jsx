@@ -22,6 +22,8 @@ export const StateContextProvider = ({ children }) => {
   const connect = useMetamask()
   const navigate= useNavigate()
   const disconnect = useDisconnect()
+  console.log(localStorage.getItem("authentication"))
+  console.log(isAuth)
   const fetchCardsData = async () => {
       try {
         const response = await fetch(`/api/cards/${localStorage.getItem('username')}`);
@@ -87,8 +89,8 @@ const fetchIncome = async() =>{
   })
   
 
-  localStorage.setItem('authentication', false)
   useEffect(() => {
+    localStorage.setItem('authentication', false)
     // if(!localStorage) localStorage.setItem('authentication', false)
     if (localStorage.getItem('authentication') === false){
         navigate('/login')
@@ -117,7 +119,7 @@ const fetchIncome = async() =>{
     localStorage.setItem('authentication', true);
     localStorage.setItem('username', user)
     localStorage.setItem('password', pass)
-      navigate('/dashboard')
+      navigate('/')
     }
     else{
       disconnect();
