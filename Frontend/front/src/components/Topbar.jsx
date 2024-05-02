@@ -10,7 +10,7 @@ const Topbar = () => {
     <div className=" flex flex-shrink justify-between items-center">
 
 
-      {isAuth && <CustomButton btnType={"button"} title={"Logout"} handleClick={() => handleAuth()} styles={" bg-blue-500 p-2 hover:bg-slate-300 hover:text-black hover:text-black"} />
+      {isAuth && <CustomButton btnType={"button"} title={"Logout"} handleClick={() => handleAuth()} styles={" bg-blue-500 p-2 hover:bg-blue-600"} />
       }
       <div className=" gap-3 justify-between hidden sm:flex">
       
@@ -26,7 +26,7 @@ const Topbar = () => {
           </div>
         </div>
       ) : (
-        <CustomButton btnType={"button"} title={"Connect to Wallet"} handleClick={() => connect()} styles={"p-2"} />
+        <CustomButton btnType={"button"} title={"Connect to Wallet"} handleClick={() => connect()} styles={"p-2 hover:bg-blue-600"} />
       ))}
     </div>
   );
