@@ -13,7 +13,6 @@ const Topbar = () => {
       {isAuth && <CustomButton btnType={"button"} title={"Logout"} handleClick={() => handleAuth()} styles={" bg-blue-500 p-2 hover:bg-blue-600"} />
       }
       <div className=" gap-3 justify-between hidden sm:flex">
-      
       </div>
       {isAuth && (address && walletBalance ? (
         <div className="p-2 rounded-2xl flex items-center justify-between gap-3 text-white" style={{ background: 'rgba(22, 100, 224, 1)' }}>
